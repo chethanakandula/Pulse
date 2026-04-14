@@ -12,25 +12,32 @@ A weekly cheat sheet. Every Monday, we publish 8-12 curated cards covering the A
 - **Honest about what's broken.** Include the skeptic takes, the forum complaints, the pricing frustrations. This is what makes Pulse different from marketing blogs.
 - **Signal over surface.** A 12-upvote Reddit comment saying "we eliminated handoff" is worth more than a 2k-clap listicle titled "10 Best AI Tools." Prioritize real practitioners over content marketers.
 - **Ambient signal.** Look for designers/PMs casually mentioning workflow changes without explicitly talking about AI. The AI part is becoming assumed — that's the story.
-- **Concise.** Card summaries are 2-3 sentences max. Blurbs are 2-3 sentences. Nobody wants to read a 2000-word newsletter.
+- **Concise.** Card descriptions are 3-4 sentences. Blurbs are 2-3 sentences. Enough to understand the story without clicking — but make them want to click.
 
-## What to include each week
+## CRITICAL: Linking rules
 
-1. **The big story** (1 card, full width) — the single most important thing that happened. Usually a product launch, major update, or industry shift.
+**Every link must go to the actual source.** No exceptions.
 
-2. **Community reactions** (2-4 cards, mix of full width and side-by-side) — what people are actually saying. Forum threads, LinkedIn debates, Twitter reactions, Substack hot takes. Include engagement data (comments, upvotes, reshares).
+- **Reddit** → link to the actual thread URL (e.g. `reddit.com/r/experienceddesigners/comments/abc123/...`), not just the subreddit
+- **LinkedIn** → link to the actual post URL (e.g. `linkedin.com/posts/clairevo_some-slug-activity-123456`), not the person's profile. If you can't find the exact post URL, link to the best alternative source (their newsletter, a news article covering the post, etc.)
+- **Twitter/X** → link to the actual tweet URL (e.g. `x.com/figma/status/123456...`)
+- **Podcasts** → link to the episode page, not the show homepage
+- **Articles** → link to the specific article, not the publication homepage
+- **Forum threads** → link to the specific thread, not the forum root
 
-3. **Workflows that actually work** (2-4 cards) — tutorials, workflow posts, and "I tried this" reports from real practitioners. Prioritize posts from individual designers over company blogs.
+If you cannot find the real URL for a specific post or thread, either search harder or replace it with a source you CAN link to directly. Never use a profile URL or homepage as a substitute for a specific post.
 
-4. **Also shipped this week** (1-2 cards) — tool updates, release notes, new features. Consolidate into dense cards.
+## Issue structure
 
-5. **Watch & listen** (6 items) — videos, podcasts, deep-dive articles, tutorials. Not just YouTube — any format worth consuming. Include estimated time.
+Every issue should have 8-12 cards total. The sections below are a guide — use what fits the week. Not every section needs to appear in every issue.
 
-6. **How we find this stuff** — the signal layers diagram (keep this static, it's part of the brand).
-
-7. **Try this week** (3 items) — actionable things at 5-min / 30-min / afternoon levels.
-
-8. **The bottom line** — 2-3 sentences. The thesis of the week. What it all means.
+- **The big story** — the single most important thing. Full-width card with rich description.
+- **What the community is saying** — reactions, debates, forum threads, LinkedIn comment chains. The stuff that shows what people actually think vs what companies announce.
+- **Tools & workflows** — tutorials, tool launches, "I tried this" reports, workflow breakdowns. From real practitioners, not marketing blogs.
+- **From the platforms** — specific Reddit threads, LinkedIn posts, podcast episodes, tweets. With real URLs and engagement data.
+- **Watch & listen** — videos, podcasts, deep-dive articles worth consuming. Include duration.
+- **Try this week** — 3 actionable things at different time commitments.
+- **The bottom line** — 2-3 sentences tying the week together. The thesis, not a recap.
 
 ## What to cut
 
@@ -39,16 +46,17 @@ A weekly cheat sheet. Every Monday, we publish 8-12 curated cards covering the A
 - **Duplicate angles** — if 3 posts say the same thing, pick the best one and link the others as secondary pills
 - **Anything you wouldn't forward to a friend** — that's the quality bar
 
-## CRITICAL: Content diversity rule
+## Content philosophy
 
-**No more than 3 cards about any single tool or company per issue.** If Figma had a big week, cover it — but also cover Cursor, Framer, Midjourney, Runway, Lovable, Replit, v0, Onlook, and whatever else designers/PMs are actually using. The digest should reflect the full landscape, not one company's release cycle.
+**Include what's genuinely interesting this week.** The only question for each card: would a designer or PM stop scrolling for this? If not, cut it.
 
-**Every issue must include at least:**
-- 1 card about a non-Figma design tool
-- 1 card about a PM/product workflow (not just design)
-- 1 card about the role/career conversation (hiring, team structure, skill shifts)
-- 1 LinkedIn post or comment thread (with engagement data)
-- 1 skeptic/counter-take (what's NOT working, what's overhyped)
+Some weeks it's all about one tool that shipped something huge. Other weeks the best stories are career threads on Reddit and a podcast episode. Let the signal decide the shape of the issue — don't force categories that aren't earning their spot.
+
+**Guidelines, not rules:**
+- No more than 3 cards about any single tool or company per issue — the digest should reflect the full landscape
+- Aim for variety across sources (not all blog posts, not all Reddit, not all Figma) — but only if the content is worth it
+- Include engagement data when it exists (upvotes, comments, reshares) — it helps readers gauge what's real
+- If nothing skeptical happened this week, don't manufacture a counter-take. If everything was drama, don't force a positive spin.
 
 ## Sources to check (in priority order)
 
@@ -59,13 +67,16 @@ A weekly cheat sheet. Every Monday, we publish 8-12 curated cards covering the A
 - **Substack newsletters**: ADPList, Good Enough Designer, Into Design Systems, UX Collective, Verified Insider, Lenny's Newsletter (product), How I AI podcast
 
 ### Tools & releases (check weekly)
-- Figma: release notes, blog, Forum complaints
-- Cursor: changelog, community reactions (designers using it)
-- v0 / Vercel: updates, designer adoption
-- Framer: AI features, site builder updates
-- Lovable / Bolt / Replit: vibe-coding tools for non-engineers
-- Onlook: "Cursor for designers" — track adoption
-- Midjourney / Runway / ElevenLabs: visual + motion + voice AI
+- **Anthropic / Claude**: Claude Code releases, Claude Cowork updates, MCP ecosystem, Anthropic blog posts. Claude Code is behind most "designer shipped code" stories. Track changelog, X/Twitter reactions, and Lenny's Podcast episodes featuring Anthropic people (Jenny Wen, Mike Krieger, Boris Cherny, Amol Avasare). Also track OpenClaw — Claire Vo's agent workflow runs on it.
+- **Cursor**: changelog, Agents Window updates, Design Mode, community reactions (designers using it)
+- **Figma**: release notes, blog, Forum complaints, credit pricing changes
+- **v0 / Vercel**: updates, designer adoption
+- **Framer**: AI features, site builder updates
+- **Lovable / Bolt / Replit**: vibe-coding tools for non-engineers
+- **Onlook**: "Cursor for designers" — track adoption
+- **Midjourney / Runway / ElevenLabs**: visual + motion + voice AI
+- **OpenAI / Codex**: GPT model updates, Codex CLI, competitive moves against Claude Code
+- **Google / Antigravity**: free agent-first IDE, Gemini updates for design workflows
 - Releasebot.io: consolidated changelogs
 
 ### Podcasts & video (extract specific claims, not summaries)
@@ -84,20 +95,27 @@ A weekly cheat sheet. Every Monday, we publish 8-12 curated cards covering the A
 - **Humbl Design**: Data reports — actual numbers on AI adoption, job trends, who's at risk.
 
 ### Key voices to track on LinkedIn
-- Jenny Wen (Anthropic, ex-Figma) — role evolution, process death
+- Jenny Wen (Anthropic, head of design for Claude) — role evolution, process death
+- Mike Krieger (Anthropic CPO, Instagram co-founder) — product strategy, AI-native product development
 - Claire Vo (ChatPRD, How I AI) — AI agents in daily life
 - Julie Zhuo (ex-Facebook VP Design) — design leadership shifts
 - John Maeda — AX (Agent Experience) as new design surface
 - Shaun Post (Intuit, ex-Google DeepMind) — honest tool reviews
-- Design directors at Atlassian, Shopify, Stripe — org-level workflow changes
+- Boris Cherny (head of Claude Code) — what happens after coding is solved
+- Lenny Rachitsky — product community hub, previews podcast insights
+- Design directors at Atlassian, Shopify, Stripe, Intercom — org-level workflow changes
 
 ### Recent high-signal episodes to reference
 - Jenny Wen on Lenny's: "The design process is dead" (Mar 1, 2026) — 173 likes
+- Boris Cherny on Lenny's: "Head of Claude Code: What happens after coding is solved"
+- Amol Avasare on Lenny's: Anthropic's growth — $1B to $19B ARR in 14 months, "ratio of PMs to engineers might need to flip"
+- Mike Krieger (Anthropic CPO) on Lenny's: "What comes next" — Instagram co-founder on AI-native product dev
 - Simon Willison on Lenny's: "AI State of the Union" — November 2025 was the inflection point
-- Claire Vo on Lenny's: 9 AI agents running her business (Mar 29, 2026)
+- Claire Vo on Lenny's: 9 OpenClaw agents running her business (Mar 29, 2026) — complete setup guide on Lenny's Newsletter
 - Lazar Jovanovic on Lenny's: "Getting paid to vibe code" — roles converging
-- Joel Unger (Atlassian design director): Cursor + Midjourney workflow for Trello
+- Joel Unger (Atlassian design director) on How I AI: Cursor + Midjourney workflow for Trello
 - Lovable growth story: $200M ARR in 1 year, "minimal lovable product" replacing MVP
+- Teresa Torres on Lenny's: Claude Code for product managers
 
 ## Proxy keywords to search for
 
