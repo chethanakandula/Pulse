@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Info — Pulse</title>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,300;1,6..72,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#060608;--s:#0C0C10;--s2:#121216;--br:#1C1C22;--brl:#2D2D34;--t:#EFECE5;--tm:#908E88;--td:#5A5856;--a:#CDFF64;--ad:rgba(205,255,100,.06);--coral:#FF6B5A;--blue:#5AB8FF;--purple:#B48AFF;--teal:#34D399;--amber:#F59E0B;--tw:#1DA1F2;--li:#0A66C2;--rd:#FF4500;--yt:#FF0000;--fg:#A259FF;--serif:'Newsreader',Georgia,serif;--sans:'DM Sans',-apple-system,sans-serif;--mono:'JetBrains Mono',monospace}
+*{margin:0;padding:0;box-sizing:border-box}body{background:var(--bg);color:var(--t);font-family:var(--sans);-webkit-font-smoothing:antialiased;line-height:1.6}a{color:inherit;text-decoration:none}::selection{background:rgba(205,255,100,.2)}
+body::after{content:'';position:fixed;inset:0;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.018'/%3E%3C/svg%3E");pointer-events:none;z-index:9999}
+nav{position:sticky;top:0;z-index:100;padding:12px 24px;display:flex;justify-content:space-between;align-items:center;backdrop-filter:blur(24px) saturate(1.4);background:rgba(6,6,8,.78);border-bottom:1px solid var(--br)}
+.logo{display:flex;align-items:center;gap:8px}.logo-m{width:26px;height:26px;border-radius:6px;background:var(--a);display:flex;align-items:center;justify-content:center;box-shadow:0 0 10px rgba(205,255,100,.12)}.logo-m svg{width:13px;height:13px}.logo span{font-family:var(--serif);font-size:19px;font-weight:500}
+.nav-r{display:flex;align-items:center;gap:16px}.nav-r a{color:var(--tm);font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+.col{max-width:800px;margin:0 auto;padding:0 28px}
+.page-head{padding:80px 0 12px;text-align:center;display:flex;flex-direction:column;align-items:center}.page-head h1{font-family:var(--serif);font-size:38px;font-weight:400;letter-spacing:-.02em;margin-bottom:10px}.page-head p{font-size:15px;color:var(--tm);font-family:var(--serif);font-weight:300;font-style:italic;max-width:500px;margin:0 auto;line-height:1.65}
+.toc{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;padding:24px 0 8px}
+.toc a{font-size:11px;font-weight:600;color:var(--td);padding:4px 12px;border:1px solid var(--br);border-radius:100px;transition:all .15s}
+.toc a:hover{border-color:var(--a);color:var(--a)}
+.sep{border:none;border-top:1px solid var(--br);margin:28px 0}
+.sl{font-size:10px;font-weight:700;color:var(--a);text-transform:uppercase;letter-spacing:.07em;padding:28px 0 6px;display:flex;align-items:center;gap:8px}.sl::after{content:'';flex:1;height:1px;background:var(--br)}
+.sl-count{font-family:var(--mono);font-size:9px;color:var(--td);font-weight:500;margin-left:4px}
+.intro{font-size:14px;color:var(--tm);font-family:var(--serif);font-weight:300;line-height:1.75;padding:6px 0 18px;max-width:620px}
+.r{display:block;background:var(--s);border:1px solid var(--br);border-radius:14px;padding:18px 20px;margin-bottom:10px;transition:all .22s}.r:hover{border-color:var(--brl);transform:translateY(-1px);box-shadow:0 6px 24px rgba(0,0,0,.2)}
+.r-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;gap:8px}
+.r-ico{width:20px;height:20px;border-radius:5px;flex-shrink:0;background:var(--s2);object-fit:contain}
+.r h3{font-size:15px;font-weight:600;display:flex;align-items:center;gap:8px}
+.r h3 a{color:var(--a);text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(205,255,100,.3)}.r h3 a:hover{text-decoration-color:var(--a)}
+.r-tag{font-family:var(--mono);font-size:9px;color:var(--td);background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);padding:2px 8px;border-radius:100px;white-space:nowrap;flex-shrink:0}
+.r-tag.ess{color:var(--a);background:var(--ad);border-color:rgba(205,255,100,.14)}
+.r-tag.new{color:var(--teal);background:rgba(52,211,153,.06);border-color:rgba(52,211,153,.14)}
+.r p{font-size:12px;color:var(--tm);line-height:1.6;font-family:var(--serif);font-weight:300}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}.g2 .r{margin-bottom:0}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px}.g3 .r{margin-bottom:0}
+footer{border-top:1px solid var(--br);padding:20px;text-align:center;font-size:10px;color:var(--td);margin-top:40px}footer a{color:var(--tm)}
+@media(max-width:640px){.g2,.g3{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo"><a href="/"><div class="logo-m"><svg viewBox="0 0 24 24" fill="none" stroke="#060608" stroke-width="2.5" stroke-linecap="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div><span>Pulse</span></a></div>
+  <div class="nav-r"><a href="/">Latest</a><a href="/info.html" style="color:var(--t)">Info</a></div>
+</nav>
+
+<div class="col">
+  <div class="page-head">
+    <h1>Info</h1>
+    <p>Every source we scan weekly to find the signal. This page updates as we discover new sources and drop ones that go quiet.</p>
+    <div class="toc">
+      <a href="#how">How we find signal</a>
+      <a href="#podcasts">Podcasts</a>
+      <a href="#newsletters">Newsletters</a>
+      <a href="#linkedin">LinkedIn</a>
+      <a href="#reddit">Reddit & Forums</a>
+      <a href="#youtube">YouTube</a>
+      <a href="#twitter">Twitter/X</a>
+      <a href="#tiktok">TikTok</a>
+      <a href="#reports">Data & Reports</a>
+      <a href="#tools">Tools we track</a>
+      <a href="#discord">Discord & Community</a>
+      <a href="#books">Books</a>
+    </div>
+  </div>
+
+  <hr class="sep">
+
+  <!-- ═══ HOW WE FIND SIGNAL ═══ -->
+  <div class="sl" id="how">How we find signal</div>
+  <p class="intro">Not every source is equal. We dig through three layers to find what matters — and most of the value is at the bottom.</p>
+
+  <div style="display:flex;flex-direction:column;gap:0;margin-bottom:32px">
+    <!-- Layer 1: Surface -->
+    <div style="background:rgba(255,255,255,.03);border:2px solid rgba(255,255,255,.08);border-radius:16px;padding:22px 24px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <span style="font-size:15px;font-weight:600;color:var(--tm)">Surface layer — what search finds</span>
+        <span style="font-family:var(--mono);font-size:10px;color:var(--coral);background:rgba(255,107,90,.08);padding:3px 10px;border-radius:100px;border:1px solid rgba(255,107,90,.15)">3-7 days behind</span>
+      </div>
+      <p style="font-size:12px;color:var(--td);margin-bottom:14px">Blog posts, listicles, release notes, product pages</p>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
+        <div style="background:var(--s);border:1px solid var(--br);border-radius:10px;padding:10px 12px;text-align:center"><span style="font-size:11px;color:var(--tm);font-weight:500">"Best AI tools"</span></div>
+        <div style="background:var(--s);border:1px solid var(--br);border-radius:10px;padding:10px 12px;text-align:center"><span style="font-size:11px;color:var(--tm);font-weight:500">Release announcements</span></div>
+        <div style="background:var(--s);border:1px solid var(--br);border-radius:10px;padding:10px 12px;text-align:center"><span style="font-size:11px;color:var(--tm);font-weight:500">Product landing pages</span></div>
+        <div style="background:var(--s);border:1px solid var(--br);border-radius:10px;padding:10px 12px;text-align:center"><span style="font-size:11px;color:var(--tm);font-weight:500">SEO'd guides</span></div>
+      </div>
+    </div>
+
+    <div style="text-align:center;padding:8px 0;color:var(--td);font-size:18px">↓</div>
+
+    <!-- Layer 2: Mid-layer -->
+    <div style="background:rgba(52,211,153,.04);border:2px solid rgba(52,211,153,.15);border-radius:16px;padding:22px 24px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <span style="font-size:15px;font-weight:600;color:var(--teal)">Mid-layer — where reactions live</span>
+        <span style="font-family:var(--mono);font-size:10px;color:var(--teal);background:rgba(52,211,153,.08);padding:3px 10px;border-radius:100px;border:1px solid rgba(52,211,153,.2)">Real-time signal</span>
+      </div>
+      <p style="font-size:12px;color:var(--td);margin-bottom:14px">Reddit threads, Twitter replies, LinkedIn comments, YouTube comments</p>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+        <div style="background:rgba(52,211,153,.04);border:1px solid rgba(52,211,153,.12);border-radius:10px;padding:12px 14px">
+          <span style="font-size:12px;font-weight:600;color:var(--teal);display:block;margin-bottom:2px">Reddit comments</span>
+          <span style="font-size:10px;color:var(--td)">"tried this, it broke"</span>
+        </div>
+        <div style="background:rgba(52,211,153,.04);border:1px solid rgba(52,211,153,.12);border-radius:10px;padding:12px 14px">
+          <span style="font-size:12px;font-weight:600;color:var(--teal);display:block;margin-bottom:2px">Twitter/X replies</span>
+          <span style="font-size:10px;color:var(--td)">Quote-tweet reactions</span>
+        </div>
+        <div style="background:rgba(52,211,153,.04);border:1px solid rgba(52,211,153,.12);border-radius:10px;padding:12px 14px">
+          <span style="font-size:12px;font-weight:600;color:var(--teal);display:block;margin-bottom:2px">LinkedIn comment chains</span>
+          <span style="font-size:10px;color:var(--td)">Design leads debating</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align:center;padding:8px 0;color:var(--td);font-size:18px">↓</div>
+
+    <!-- Layer 3: Deep signal -->
+    <div style="background:rgba(180,138,255,.04);border:2px solid rgba(180,138,255,.15);border-radius:16px;padding:22px 24px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <span style="font-size:15px;font-weight:600;color:var(--purple)">Deep signal — ambient, untagged, unlabeled</span>
+        <span style="font-family:var(--mono);font-size:10px;color:var(--coral);background:rgba(255,107,90,.08);padding:3px 10px;border-radius:100px;border:1px solid rgba(255,107,90,.15)">Highest value, hardest to find</span>
+      </div>
+      <p style="font-size:12px;color:var(--td);margin-bottom:14px">Not about AI tools. About workflow shifts, team changes, career pivots</p>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+        <div style="background:rgba(180,138,255,.05);border:1px solid rgba(180,138,255,.14);border-radius:10px;padding:12px 14px">
+          <span style="font-size:12px;font-weight:600;color:var(--purple);display:block;margin-bottom:2px">Career advice posts</span>
+          <span style="font-size:10px;color:var(--td)">"learn Skills or cooked"</span>
+        </div>
+        <div style="background:rgba(180,138,255,.05);border:1px solid rgba(180,138,255,.14);border-radius:10px;padding:12px 14px">
+          <span style="font-size:12px;font-weight:600;color:var(--purple);display:block;margin-bottom:2px">Team restructuring</span>
+          <span style="font-size:10px;color:var(--td)">"cut from 8 to 5, ship more"</span>
+        </div>
+        <div style="background:rgba(180,138,255,.05);border:1px solid rgba(180,138,255,.14);border-radius:10px;padding:12px 14px">
+          <span style="font-size:12px;font-weight:600;color:var(--purple);display:block;margin-bottom:2px">Casual show-and-tell</span>
+          <span style="font-size:10px;color:var(--td)">"built this today, solo"</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align:center;padding:8px 0;color:var(--td);font-size:18px">↓</div>
+
+    <!-- Synthesis -->
+    <div style="background:rgba(180,140,60,.08);border:2px solid rgba(180,140,60,.2);border-radius:16px;padding:24px;text-align:center">
+      <span style="font-size:16px;font-weight:700;color:#d4a853;display:block;margin-bottom:6px">Editorial synthesis</span>
+      <p style="font-size:13px;color:var(--tm);line-height:1.5;max-width:480px;margin:0 auto">Read 40 comments, notice the pattern none state.<br>Write the insight, not the recap.</p>
+    </div>
+  </div>
+
+  <!-- ═══ PODCASTS ═══ -->
+  <div class="sl" id="podcasts">Podcasts <span class="sl-count">10</span></div>
+  <p class="intro">The best thinking about AI × design happens in long-form conversation. We extract specific claims you can act on — not episode summaries.</p>
+
+  <div class="r">
+    <div class="r-top"><h3><a href="https://www.lennysnewsletter.com/podcast" target="_blank">Lenny's Podcast</a></h3><span class="r-tag ess">essential</span></div>
+    <p>The most influential product podcast. Recent AI × design episodes: Jenny Wen (Anthropic) on the design process being dead, Simon Willison's AI inflection point, Claire Vo running life with 9 agents, Lovable's $200M ARR growth story, Amol Avasare on Anthropic's growth. Someone ran AI across 284 episodes and found PMs shifting from feature delivery to systems thinking.</p>
+  </div>
+
+  <div class="g2">
+    <div class="r">
+      <div class="r-top"><h3><a href="https://www.lennysnewsletter.com/s/how-i-ai" target="_blank">How I AI</a></h3><span class="r-tag ess">essential</span></div>
+      <p>Lenny's sister podcast, hosted by Claire Vo. Each ep: one person, their actual AI workflow, what broke. The most practical source on this list.</p>
+    </div>
+    <div class="r">
+      <div class="r-top"><h3><a href="https://podcasts.apple.com/us/podcast/ai-and-design/id1868571210" target="_blank">AI and Design</a></h3><span class="r-tag new">new</span></div>
+      <p>Dan Saffer & Nik Martelaro. Dedicated entirely to the AI × design intersection. Covers Figma State of Designer report, Google Stitch, AI house style, agentic UI. Weekly hot takes on every announcement.</p>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="r">
+      <div class="r-top"><h3><a href="https://spec.fm/podcasts/design-details" target="_blank">Design Details</a></h3><span class="r-tag">weekly</span></div>
+      <p>More design-focused than Lenny's. Covers the craft side — design systems, component thinking, visual quality as AI shifts the work.</p>
+    </div>
+    <div class="r">
+      <div class="r-top"><h3><a href="https://designbetterpodcast.com/" target="_blank">Design Better</a></h3><span class="r-tag">weekly</span></div>
+      <p>Eli Woolery & Aarron Walter. Guests from Adobe, NYT, Google. Recent: Rachana Rele (VP Product Design, Adobe AI) and Leonardo Giusti on AI as a tool you think with, not for you.</p>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="r">
+      <div class="r-top"><h3><a href="https://www.nngroup.com/podcasts/" target="_blank">NN/g UX Podcast</a></h3><span class="r-tag">bi-weekly</span></div>
+      <p>Nielsen Norman Group. Research-backed takes on AI UX. Their "AI as a UI" episode gave data-backed confidence on why low-friction beats high-aesthetic now.</p>
+    </div>
+    <div class="r">
+      <div class="r-top"><h3><a href="https://uibreakfast.com/category/podcast/" target="_blank">UI Breakfast</a></h3><span class="r-tag">weekly</span></div>
+      <p>Jane Portman. SaaS UI/UX and product strategy. Practical tips from the intersection of design and product-led growth. No theory, just what works.</p>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="r">
+      <div class="r-top"><h3><a href="https://www.youtube.com/@lennyrachitsky" target="_blank">Lenny's YouTube (clips)</a></h3><span class="r-tag">daily</span></div>
+      <p>8-min clips from 90-min conversations. Often better than the full episodes — the most quotable insight without the filler.</p>
+    </div>
+    <div class="r">
+      <div class="r-top"><h3><a href="https://futureux.design/" target="_blank">Future of UX</a></h3><span class="r-tag">weekly</span></div>
+      <p>Patricia Reiners. Emerging trends, new tools, and how tech reshapes design for users. If you geek out over Figma updates or designing for agents, this is it.</p>
+    </div>
+  </div>
+
+  <!-- ═══ NEWSLETTERS ═══ -->
+  <div class="sl" id="newsletters">Newsletters & Substacks <span class="sl-count">12</span></div>
+  <p class="intro">Where the tested, opinionated takes live. These writers experiment with tools and report back — not content marketing.</p>
+
+  <div class="r">
+    <div class="r-top"><h3><a href="https://verifiedinsider.substack.com/" target="_blank">Verified Insider</a></h3><span class="r-tag ess">essential</span></div>
+    <p>Deep interviews with AI-native designers. "Operating as an AI-native product designer in 2026" is the best piece on how the role actually works now. Key insight: "The role shift is from making to deciding."</p>
+  </div>
+
+  <div class="g2">
+    <div class="r">
+      <div class="r-top"><h3><a href="https://adplist.substack.com/" target="_blank">ADPList</a></h3><span class="r-tag ess">essential</span></div>
+      <p>Felix Lee's Claude Code + Figma MCP playbook. The most practical end-to-end tutorial for designers who want to ship code.</p>
+    </div>
+    <div class="r">
+      <div class="r-top"><h3><a href="https://www.lennysnewsletter.com/" target="_blank">Lenny's Newsletter</a></h3><span class="r-tag ess">essential</span></div>
+      <p>Written companion to the podcast. Transcripts, frameworks, hiring data. Teresa Torres on Claude Code for PMs is essential reading.</p>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="r">
+      <div class="r-top"><h3><a href="https://goodenoughdesigner.substack.com/" target="_blank">Good Enough Designer</a></h3><span class="r-tag">weekly</span></div>
+      <p>Solo designer figuring it out in public. Honest about what doesn't work. Their vibe-coding piece nailed the gap between design and code.</p>
+    </div>
+    <div class="r">
+      <div class="r-top"><h3><a href="https://www.intodesignsystems.com/" target="_blank">Into Design Systems</a></h3><span class="r-tag">bi-weekly</span></div>
+      <p>Sil Bormüller. Design system + AI intersection. Technical but for designers. Also runs a 2-day conference on AI for design teams.</p>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="r">
+      <div class="r-top"><h3><a href="https://uxdesign.cc/" target="_blank">UX Collective</a></h3><span class="r-tag">weekly</span></div>
+      <p>Deepest design thinking. Christine Vallaure's agentic AI + design systems piece went viral — 400+ LinkedIn comments.</p>
+    </div>
+    <div class="r">
+      <div class="r-top"><h3><a href="https://muz.li/blog/" target="_blank">Muzli</a></h3><span class="r-tag">daily</span></div>
+      <p>Used by 800k+ designers. Their vibe coding guide — "AI is the intern, you're the Lead" — is the best evaluation framework for tools.</p>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="r">
+      <div class="r-top"><h3><a href="https://www.oneusefulthing.org/" target="_blank">One Useful Thing (Ethan Mollick)</a></h3><span class="r-tag ess">essential</span></div>
+      <p>Wharton professor. Arguably the single best AI newsletter. Academic rigor + hands-on experimentation on how AI changes work. Not design-specific but every designer should read it.</p>
+    </div>
+    <div class="r">
+      <div class="r-top"><h3><a href="https://designintech.report/" target="_blank">Design in Tech Report</a></h3><span class="r-tag">annual</span></div>
+      <p>John Maeda's annual report on the intersection of design, technology, and business. The 2026 edition introduced AX (Agent Experience) as a new design surface.</p>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="r">
+      <div class="r-top"><h3><a href="https://medium.com/design-bootcamp" target="_blank">Bootcamp (Medium)</a></h3><span class="r-tag">daily</span></div>
+      <p>The Medium design publication. "Designers are not being replaced, they are being sorted" is one of the most shared design × AI pieces of 2026.</p>
+    </div>
+    <div class="r">
+      <div class="r-top"><h3><a href="https://bensbites.com/" target="_blank">Ben's Bites</a></h3><span class="r-tag">daily</span></div>
+      <p>General AI newsletter but catches tool launches early. When a new AI design tool drops, Ben's Bites usually has it within 24 hours.</p>
+    </div>
+  </div>
+
+  <!-- ═══ LINKEDIN ═══ -->
+  <div class="sl" id="linkedin">LinkedIn voices <span class="sl-count">10</span></div>
+  <p class="intro">LinkedIn is where senior people talk about org-level shifts. The posts matter. The comment threads matter more. We track posts with 100+ comments — that's where the real debate happens.</p>
+
+  <div class="g2">
+    <div class="r">
+      <h3><a href="https://www.linkedin.com/in/jenny-wen/" target="_blank">Jenny Wen</a></h3>
+      <p>Head of design at Claude/Anthropic. Ex-Figma. "The design process is dead" — the most referenced take in AI × design right now.</p>
+    </div>
+    <div class="r">
+      <h3><a href="https://www.linkedin.com/in/clairevo/" target="_blank">Claire Vo</a></h3>
+      <p>ChatPRD founder, How I AI host. 9 AI agents running her life. Her LinkedIn post about AI employees went viral.</p>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="r">
+      <h3><a href="https://www.linkedin.com/in/joulee/" target="_blank">Julie Zhuo</a></h3>
+      <p>Ex-VP Design at Facebook. Design leadership in the AI era. Built one of the largest design orgs in tech.</p>
+    </div>
+    <div class="r">
+      <h3><a href="https://www.linkedin.com/in/johnmaeda/" target="_blank">John Maeda</a></h3>
+      <p>Coined "AX" (Agent Experience). Designers now design for three audiences: humans, AI agents, and machines.</p>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="r">
+      <h3><a href="https://www.linkedin.com/in/christinevallaure/" target="_blank">Christine Vallaure</a></h3>
+      <p>UX Collective author. Her design systems + agentic AI piece hit 400+ comments. Asks: "Where does visual truth live?"</p>
+    </div>
+    <div class="r">
+      <h3><a href="https://www.linkedin.com/in/shaunpost/" target="_blank">Shaun Post</a></h3>
+      <p>Principal Product Designer at Intuit, ex-Google DeepMind. Writes the most honest AI tool reviews — tested 40+ tools.</p>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="r">
+      <h3><a href="https://www.linkedin.com/in/mollick/" target="_blank">Ethan Mollick</a></h3>
+      <p>Wharton prof. Every post is an experiment. His threads about AI in knowledge work get 1000+ reshares. The data always backs the claim.</p>
+    </div>
+    <div class="r">
+      <h3><a href="https://www.linkedin.com/in/kozyrkov/" target="_blank">Cassie Kozyrkov</a></h3>
+      <p>Google's former Chief Decision Scientist. 500k+ followers. Makes AI concepts approachable. LinkedIn Top Voice 5 years running.</p>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="r">
+      <h3><a href="https://www.linkedin.com/in/lennyrachitsky/" target="_blank">Lenny Rachitsky</a></h3>
+      <p>The product community hub. His posts preview podcast episodes and surface insights that don't make it into the newsletter.</p>
+    </div>
+    <div class="r">
+      <h3><a href="https://www.linkedin.com/in/joelunger/" target="_blank">Joel Unger</a></h3>
+      <p>Design director at Atlassian (Trello). Uses Cursor + Midjourney daily. Podcast guest on How I AI — real senior workflow, not theory.</p>
+    </div>
+  </div>
+
+  <!-- ═══ REDDIT ═══ -->
+  <div class="sl" id="reddit">Reddit & forums <span class="sl-count">7</span></div>
+  <p class="intro">Where people say what they actually think. No personal brand to protect. The Figma Forum credit complaints were the highest-signal content we found this week — nobody else covered them.</p>
+
+  <div class="g2">
+    <div class="r">
+      <h3><a href="https://www.reddit.com/r/FigmaDesign/" target="_blank">r/FigmaDesign</a></h3>
+      <p>171 mentions/month. Credit complaints, MCP reactions, "tried this it broke" reports. The tension is the story.</p>
+    </div>
+    <div class="r">
+      <h3><a href="https://www.reddit.com/r/UI_Design/" target="_blank">r/UI_Design</a></h3>
+      <p>More practical than r/UXDesign. Tool recs from people who ship. Less theory, more screenshots.</p>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="r">
+      <h3><a href="https://www.reddit.com/r/experienceddesigners/" target="_blank">r/ExperiencedDesigners</a></h3>
+      <p>Senior designers talking honestly. Career advice that casually mentions AI workflow shifts — the deep signal layer.</p>
+    </div>
+    <div class="r">
+      <h3><a href="https://forum.figma.com/" target="_blank">Figma Forum</a></h3>
+      <p>The unfiltered voice. Credit complaints, feature requests, "this is not sustainable" posts. Every link in our credit revolt card came from here.</p>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="r">
+      <h3><a href="https://www.reddit.com/r/ProductManagement/" target="_blank">r/ProductManagement</a></h3>
+      <p>PMs talking about AI in workflows. "PM who prototypes" threads surface here before they become blog posts.</p>
+    </div>
+    <div class="r">
+      <h3><a href="https://www.reddit.com/r/UXDesign/" target="_blank">r/UXDesign</a></h3>
+      <p>Broader UX community. More career-focused. "Will AI replace me" threads are where the real anxiety (and best advice) lives.</p>
+    </div>
+  </div>
+
+  <div class="r">
+    <h3><a href="https://www.reddit.com/r/webdev/" target="_blank">r/webdev</a></h3>
+    <p>Developers reacting to design tools going code-first. When designers start shipping code, developers have opinions. Those opinions are signal.</p>
+  </div>
+
+  <!-- ═══ YOUTUBE ═══ -->
+  <div class="sl" id="youtube">YouTube <span class="sl-count">8</span></div>
+  <p class="intro">Tutorial-style content where people show their screens. You see what actually works and what's faked for the thumbnail.</p>
+
+  <div class="g2">
+    <div class="r">
+      <div class="r-top"><h3><a href="https://www.youtube.com/@DesignCourse" target="_blank">DesignCourse</a></h3><span class="r-tag ess">essential</span></div>
+      <p>Gary Simon. Practical Figma-to-code tutorials. His MCP walkthrough (21 min) is one of the most-watched designer + AI videos this month.</p>
+    </div>
+    <div class="r">
+      <div class="r-top"><h3><a href="https://www.youtube.com/@riaborstlap" target="_blank">Ridd</a></h3><span class="r-tag">2-3x/week</span></div>
+      <p>Short-form AI design tool reviews. High signal-to-noise. New tool drops → Ridd has a review in 48 hours.</p>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="r">
+      <div class="r-top"><h3><a href="https://www.youtube.com/@PunitChawla" target="_blank">Punit Chawla</a></h3><span class="r-tag">weekly</span></div>
+      <p>Discovers AI design tools before they hit mainstream. Unicorn Studio, Framer AI, vibe-coding tools. Good for the "what's next" layer.</p>
+    </div>
+    <div class="r">
+      <div class="r-top"><h3><a href="https://www.youtube.com/@figma" target="_blank">Figma</a></h3><span class="r-tag">irregular</span></div>
+      <p>Official. Config talks, feature deep-dives. FigCade behind-the-scenes shows how Figma's team uses their own AI.</p>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="r">
+      <div class="r-top"><h3><a href="https://www.youtube.com/@felixlee" target="_blank">Felix Lee</a></h3><span class="r-tag new">new</span></div>
+      <p>The designer who built the Claude Code + Figma MCP pipeline. His 50-min video is the definitive walkthrough. 2.1k likes.</p>
+    </div>
+    <div class="r">
+      <div class="r-top"><h3><a href="https://www.youtube.com/@chrisdocreates" target="_blank">ChrisDoCreates</a></h3><span class="r-tag">weekly</span></div>
+      <p>The Futur. Design × business × AI. Chris Do interviews agency founders adapting to AI. Covers the business side most design channels miss.</p>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="r">
+      <div class="r-top"><h3><a href="https://www.youtube.com/@AIExplained-official" target="_blank">AI Explained</a></h3><span class="r-tag">weekly</span></div>
+      <p>Not design-specific, but the most thoughtful AI analysis on YouTube. Nuance and honesty. When a model drops, watch this before forming opinions.</p>
+    </div>
+    <div class="r">
+      <div class="r-top"><h3><a href="https://www.youtube.com/@NateBJones" target="_blank">Nate B Jones</a></h3><span class="r-tag">daily</span></div>
+      <p>In-depth AI tool walkthroughs. When a new design-adjacent tool launches (v0, Lovable, Builder.io), Nate has the best hands-on demo.</p>
+    </div>
+  </div>
+
+  <!-- ═══ TWITTER ═══ -->
+  <div class="sl" id="twitter">Twitter / X <span class="sl-count">8</span></div>
+  <p class="intro">Where things break first. A designer tweets a before/after with "built this today" — no hashtags — and the replies tell you everything.</p>
+
+  <div class="g2">
+    <div class="r"><h3><a href="https://x.com/figma" target="_blank">@figma</a></h3><p>Product announcements. Real signal = quote-tweet reactions from designers who tried it within hours.</p></div>
+    <div class="r"><h3><a href="https://x.com/rsms" target="_blank">@rsms</a></h3><p>Rasmus Andersson. Ex-Figma, ex-Facebook design. When he tweets about a tool, the community listens.</p></div>
+  </div>
+  <div class="g2">
+    <div class="r"><h3><a href="https://x.com/raborstlap" target="_blank">@raborstlap</a></h3><p>Ridd. Short clips of AI tools in action. First to demo new releases. His threads get picked up by newsletters.</p></div>
+    <div class="r"><h3><a href="https://x.com/simonw" target="_blank">@simonw</a></h3><p>Simon Willison. Coined "prompt injection" and "AI slop." The most trusted voice on what's real vs hype in AI tools.</p></div>
+  </div>
+  <div class="g2">
+    <div class="r"><h3><a href="https://x.com/joulee" target="_blank">@joulee</a></h3><p>Julie Zhuo. Design leadership threads. When she says something about AI + design org structure, 10k people reshare.</p></div>
+    <div class="r"><h3><a href="https://x.com/cursor_ai" target="_blank">@cursor_ai</a></h3><p>Cursor's official. Track designer adoption reactions in the replies — that's where the workflow shift stories live.</p></div>
+  </div>
+  <div class="g2">
+    <div class="r"><h3><a href="https://x.com/vaborstlap" target="_blank">@veraborstlap</a></h3><p>Designer and builder. Documents the design-to-code transition in real time. Shows real Figma → code workflows.</p></div>
+    <div class="r"><h3><a href="https://x.com/raaborstlap" target="_blank">Design Twitter clusters</a></h3><p>We don't just follow individuals — when 3+ designers tweet about the same tool in 48 hours, that's a trend.</p></div>
+  </div>
+
+  <!-- ═══ TIKTOK ═══ -->
+  <div class="sl" id="tiktok">TikTok <span class="sl-count">3</span></div>
+  <p class="intro">Short-form video where the youngest designers discover tools and share workflows. Different energy than Twitter — more "watch me build this" than "here's my take."</p>
+
+  <div class="g3">
+    <div class="r">
+      <h3><a href="https://www.tiktok.com/@rileybrown.ai" target="_blank">Riley Brown</a></h3>
+      <p>#1 AI educator on TikTok. 600k+ followers. Vibe coding, agents, new tools — all accessible.</p>
+    </div>
+    <div class="r">
+      <h3><a href="https://www.tiktok.com/@the.rachelwoods" target="_blank">Rachel Woods</a></h3>
+      <p>Ex-Meta data scientist. AI workflows for non-technical people. 160k followers. Practical, not hype.</p>
+    </div>
+    <div class="r">
+      <h3><a href="https://www.tiktok.com/@femke.design" target="_blank">Femke Design</a></h3>
+      <p>Product designer sharing process. AI tools in real design work. The "day in the life" format shows adoption honestly.</p>
+    </div>
+  </div>
+
+  <!-- ═══ DATA ═══ -->
+  <div class="sl" id="reports">Data & industry reports <span class="sl-count">6</span></div>
+  <p class="intro">Numbers, not vibes. When someone says "AI is replacing designers," we check the data.</p>
+
+  <div class="g2">
+    <div class="r">
+      <h3><a href="https://www.humbldesign.io/" target="_blank">Humbl Design</a></h3>
+      <p>2026 report: only 31% of designers use AI for core work vs 59% of developers. "AI won't replace designers — it will wipe out pixel-pushers."</p>
+    </div>
+    <div class="r">
+      <h3><a href="https://www.figma.com/blog/figma-2025-ai-report-perspectives/" target="_blank">Figma AI Report</a></h3>
+      <p>Annual survey. 73% of hiring managers want AI-tool proficiency. 79% want designers who can design AI products.</p>
+    </div>
+  </div>
+  <div class="g2">
+    <div class="r">
+      <h3><a href="https://gozade.com/" target="_blank">Gozade</a></h3>
+      <p>Design career analysis. "Designers are not being replaced, they are being sorted" — cites Figma's State of the Designer data.</p>
+    </div>
+    <div class="r">
+      <h3><a href="https://designintech.report/" target="_blank">Design in Tech Report</a></h3>
+      <p>John Maeda's annual report. 2026 edition: AX (Agent Experience) as a new design surface alongside UX and CX.</p>
+    </div>
+  </div>
+  <div class="g2">
+    <div class="r">
+      <h3><a href="https://releasebot.io/" target="_blank">Releasebot</a></h3>
+      <p>Consolidated changelogs for design tools. When Figma ships 5 features in a week, Releasebot has the clean timeline.</p>
+    </div>
+    <div class="r">
+      <h3><a href="https://uxplanet.org/" target="_blank">UX Planet (State of AI in Design)</a></h3>
+      <p>Annual survey tracking AI adoption among designers. Shadow usage data — designers experimenting with AI alone, outside team process.</p>
+    </div>
+  </div>
+
+  <!-- ═══ TOOLS ═══ -->
+  <div class="sl" id="tools">Tools we track <span class="sl-count">12</span></div>
+  <p class="intro">Not a "best tools" list. These are the tools whose updates and community reactions shape the weekly conversation.</p>
+
+  <div class="g3">
+    <div class="r"><h3>Figma</h3><p>Make, Weave, MCP, Sites, Skills. The platform. We track releases, forum complaints, credit pricing.</p></div>
+    <div class="r"><h3>Cursor</h3><p>AI code editor designers are adopting. 500+ engineers at eBay. Designers use it to prototype in real codebases.</p></div>
+    <div class="r"><h3>v0 by Vercel</h3><p>Prompt-to-UI. Now agentic. Credit pricing backlash mirrors Figma's.</p></div>
+  </div>
+  <div class="g3">
+    <div class="r"><h3>Lovable</h3><p>$200M ARR in 1 year. "Minimal lovable product" replacing MVP.</p></div>
+    <div class="r"><h3>Framer</h3><p>AI layout engine. Describe a section → get production markup.</p></div>
+    <div class="r"><h3>Onlook</h3><p>"Cursor for designers." Figma-like editing of your React app.</p></div>
+  </div>
+  <div class="g3">
+    <div class="r"><h3>Midjourney</h3><p>Best for moodboards and visual directions before stakeholder pitches.</p></div>
+    <div class="r"><h3>Runway</h3><p>Gen-3 Alpha. Video + motion for design presentations. Solo designers can now produce what teams couldn't.</p></div>
+    <div class="r"><h3>Replit</h3><p>PMs vibe-coding dashboards. No tool-switching. The PM-as-builder story.</p></div>
+  </div>
+  <div class="g3">
+    <div class="r"><h3>Claude Code</h3><p>Anthropic's CLI. The tool behind most "designer shipped code" stories right now.</p></div>
+    <div class="r"><h3>Builder.io</h3><p>AI prototyping for PMs. Connects to your real codebase. Prototypes become PRs.</p></div>
+    <div class="r"><h3>ElevenLabs</h3><p>Voice for prototypes. Narrated walkthroughs, user testing stimuli. Surprisingly useful for design presentations.</p></div>
+  </div>
+
+  <!-- ═══ DISCORD ═══ -->
+  <div class="sl" id="discord">Discord & community <span class="sl-count">4</span></div>
+  <p class="intro">Real-time conversations. People share work-in-progress, ask for help, and react to announcements before the takes get polished for LinkedIn.</p>
+
+  <div class="g2">
+    <div class="r">
+      <h3><a href="https://discord.gg/figma" target="_blank">Figma Community Discord</a></h3>
+      <p>Unofficial but massive. Plugin devs, MCP experimenters, and designers sharing real-time reactions to releases.</p>
+    </div>
+    <div class="r">
+      <h3><a href="https://discord.gg/cursor" target="_blank">Cursor Discord</a></h3>
+      <p>Designers asking how to set up design-to-code workflows. The "I'm a designer, where do I start" threads are pure signal.</p>
+    </div>
+  </div>
+  <div class="g2">
+    <div class="r">
+      <h3><a href="https://discord.gg/lovable" target="_blank">Lovable Discord</a></h3>
+      <p>Where non-engineers share what they built. PM prototypes, designer side projects, "shipped my first thing" energy.</p>
+    </div>
+    <div class="r">
+      <h3><a href="https://discord.gg/framer" target="_blank">Framer Community</a></h3>
+      <p>Designers building production sites with AI. Template sharing, component tricks, AI layout experiments.</p>
+    </div>
+  </div>
+
+  <!-- ═══ BOOKS ═══ -->
+  <div class="sl" id="books">Books <span class="sl-count">4</span></div>
+  <p class="intro">The books that shaped how we think about AI × design. Not a reading list — these are the frameworks behind our editorial lens.</p>
+
+  <div class="g2">
+    <div class="r">
+      <div class="r-top"><h3><a href="https://www.amazon.com/Co-Intelligence-Living-Working-Ethan-Mollick/dp/059371671X" target="_blank">Co-Intelligence — Ethan Mollick</a></h3><span class="r-tag ess">essential</span></div>
+      <p>How to work with AI as a collaborator. Wharton prof with real experiments. The most grounded book on AI in knowledge work.</p>
+    </div>
+    <div class="r">
+      <div class="r-top"><h3><a href="https://amzn.to/4lAf9qi" target="_blank">Designing AI Interfaces — Louise Macfadyn</a></h3><span class="r-tag new">new</span></div>
+      <p>Upcoming book. Covered on the AI and Design podcast. The first dedicated guide to designing interfaces for AI products.</p>
+    </div>
+  </div>
+  <div class="g2">
+    <div class="r">
+      <h3><a href="https://www.amazon.com/Coming-Wave-Technology-Twenty-first-Centurys/dp/0593593952" target="_blank">The Coming Wave — Mustafa Suleyman</a></h3>
+      <p>DeepMind co-founder, Microsoft AI CEO. Why AI + synthetic biology are nearly impossible to control. The macro context for everything.</p>
+    </div>
+    <div class="r">
+      <h3><a href="https://www.amazon.com/Sprint-Solve-Problems-Test-Ideas/dp/150112174X" target="_blank">Sprint — Jake Knapp</a></h3>
+      <p>The original 5-day design sprint. Still relevant — but now the "build" phase happens in hours with AI, not days.</p>
+    </div>
+  </div>
+
+  <hr class="sep">
+
+  <div style="text-align:center;padding:20px 0 40px">
+    <p style="font-size:14px;color:var(--tm);font-family:var(--serif);font-weight:300;font-style:italic;max-width:460px;margin:0 auto;line-height:1.65">This page updates as sources rise and fall. If we missed something that should be here, tell us on <a href="#" style="color:var(--a);text-decoration:underline;text-decoration-color:rgba(205,255,100,.3)">Twitter</a>.</p>
+  </div>
+
+</div>
+
+<footer><p>Pulse — AI × Design, distilled weekly · <a href="/">Latest</a> · <a href="/info.html">Info</a></p></footer>
+
+</body>
+</html>
