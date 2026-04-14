@@ -6,38 +6,67 @@
 <title>Archive — Pulse</title>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,300;1,6..72,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#F6F4F0;--s:#FFFFFF;--br:#E2DED6;--brl:#CCC8BF;--t:#1A1A18;--tm:#7A776E;--td:#A09D95;--a:#3D7A50;--ad:rgba(75,120,90,.06);--serif:'Newsreader',Georgia,serif;--sans:'DM Sans',-apple-system,sans-serif;--mono:'JetBrains Mono',monospace;--nav-bg:rgba(246,244,240,.85)}
-*{margin:0;padding:0;box-sizing:border-box}body{background:var(--bg);color:var(--t);font-family:var(--sans);-webkit-font-smoothing:antialiased;line-height:1.6}a{color:inherit;text-decoration:none}
-nav{position:sticky;top:0;z-index:100;padding:12px 24px;display:flex;justify-content:space-between;align-items:center;backdrop-filter:blur(24px);background:var(--nav-bg);border-bottom:1px solid var(--br)}
+:root{--bg:#F6F4F0;--s:#FFFFFF;--s2:#F0EDE8;--br:#E2DED6;--brl:#CCC8BF;--t:#1A1A18;--tm:#7A776E;--td:#A09D95;--a:#3D7A50;--ad:rgba(75,120,90,.06);--serif:'Newsreader',Georgia,serif;--sans:'DM Sans',-apple-system,sans-serif;--mono:'JetBrains Mono',monospace;--nav-bg:rgba(246,244,240,.85);--sel:rgba(75,120,90,.15);--noise:0}
+[data-theme="dark"]{--bg:#060608;--s:#0C0C10;--s2:#121216;--br:#1C1C22;--brl:#2D2D34;--t:#EFECE5;--tm:#908E88;--td:#5A5856;--a:#CDFF64;--ad:rgba(205,255,100,.06);--nav-bg:rgba(6,6,8,.78);--sel:rgba(205,255,100,.2);--noise:.018}
+.logo-m svg{stroke:#fff}
+[data-theme="dark"] .logo-m svg{stroke:#060608}
+.theme-toggle{width:28px;height:28px;border-radius:6px;border:none;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;color:var(--tm);flex-shrink:0}
+.theme-toggle:hover{color:var(--t)}
+*{margin:0;padding:0;box-sizing:border-box}body{background:var(--bg);color:var(--t);font-family:var(--sans);-webkit-font-smoothing:antialiased;line-height:1.6}a{color:inherit;text-decoration:none}::selection{background:var(--sel)}
+body::after{content:'';position:fixed;inset:0;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.018'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:var(--noise,1)}
+nav{position:sticky;top:0;z-index:100;padding:12px 24px;display:flex;justify-content:space-between;align-items:center;backdrop-filter:blur(24px) saturate(1.4);background:var(--nav-bg);border-bottom:1px solid var(--br)}
 .logo{display:flex;align-items:center;gap:8px}.logo-m{width:26px;height:26px;border-radius:6px;background:var(--a);display:flex;align-items:center;justify-content:center}.logo-m svg{width:13px;height:13px}.logo span{font-family:var(--serif);font-size:19px;font-weight:500}
 .nav-r{display:flex;align-items:center;gap:18px}.nav-r a{color:var(--td);font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase}
 .col{max-width:800px;margin:0 auto;padding:0 28px}
-.page-head{padding:80px 0 40px;text-align:center}.page-head h1{font-family:var(--serif);font-size:36px;font-weight:400;letter-spacing:-.02em;margin-bottom:8px}.page-head p{font-size:15px;color:var(--tm);font-family:var(--sans)}
-.il{display:flex;justify-content:space-between;align-items:center;padding:20px 24px;background:var(--s);border:1px solid var(--br);border-radius:14px;margin-bottom:10px;transition:all .22s}.il:hover{border-color:var(--brl);transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,0,0,.04)}
-.il-l h3{font-family:var(--serif);font-size:18px;font-weight:400;margin-bottom:3px}.il-l p{font-size:13px;color:var(--tm)}
-.il-r{font-family:var(--mono);font-size:11px;color:var(--td);white-space:nowrap}
-.il-cur{border-color:rgba(75,120,90,.2)}.il-cur .il-r{color:var(--a)}
-footer{border-top:1px solid var(--br);padding:20px;text-align:center;font-size:10px;color:var(--td);margin-top:60px}footer a{color:var(--tm)}
+.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 28px 160px}
+.empty-ico{width:56px;height:56px;border-radius:14px;background:var(--ad);border:1px solid var(--br);display:flex;align-items:center;justify-content:center;margin-bottom:20px;color:var(--a)}
+.empty h1{font-family:var(--serif);font-size:28px;font-weight:400;letter-spacing:-.02em;margin-bottom:10px}
+.empty p{font-size:15px;color:var(--tm);line-height:1.7;max-width:400px}
+.empty a{display:inline-block;margin-top:20px;font-size:12px;font-weight:600;color:var(--a);text-decoration:underline;text-underline-offset:3px}
+footer{border-top:1px solid var(--br);padding:20px;text-align:center;font-size:10px;color:var(--td);margin-top:0}footer a{color:var(--tm)}
 </style>
+<script>
+var moonSVG='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+var sunSVG='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';
+function toggleTheme(){
+  var html=document.documentElement;
+  var btn=document.getElementById('themeBtn');
+  if(html.getAttribute('data-theme')==='dark'){
+    html.removeAttribute('data-theme');
+    btn.innerHTML=moonSVG;
+    localStorage.setItem('pulse-theme','light');
+  }else{
+    html.setAttribute('data-theme','dark');
+    btn.innerHTML=sunSVG;
+    localStorage.setItem('pulse-theme','dark');
+  }
+}
+(function(){
+  var saved=localStorage.getItem('pulse-theme');
+  if(saved==='dark'){
+    document.documentElement.setAttribute('data-theme','dark');
+    document.addEventListener('DOMContentLoaded',function(){document.getElementById('themeBtn').innerHTML=sunSVG});
+  }
+})();
+</script>
 </head>
 <body>
+
 <nav>
-  <div class="logo"><a href="/"><div class="logo-m"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div><span>Pulse</span></a></div>
-  <div class="nav-r"><a href="/">Latest</a><a href="/info.html">Info</a></div>
+  <div class="logo"><a href="/"><div class="logo-m"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div><span>Pulse</span></a><button class="theme-toggle" onclick="toggleTheme()" id="themeBtn" title="Toggle light/dark mode"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button></div>
+  <div class="nav-r"><a href="/">Latest</a><a href="/archive/" style="color:var(--t)">Archive</a><a href="/info.html">Info</a></div>
 </nav>
+
 <div class="col">
-  <div class="page-head">
+  <div class="empty">
+    <div class="empty-ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg></div>
     <h1>Archive</h1>
-    <p>Every issue of Pulse, from the beginning.</p>
+    <p>Every past issue of Pulse will live here. We're just getting started — check back after a few Mondays.</p>
+    <a href="/">Read the latest issue →</a>
   </div>
-  <a href="/archive/14/" class="il il-cur">
-    <div class="il-l">
-      <h3>Issue #14 — The tools are splitting</h3>
-      <p>Cursor 3 agent control room, Lovable $200M ARR, designers being sorted, Onlook, vibe coding bakeoff</p>
-    </div>
-    <div class="il-r">Apr 14, 2026 · Latest</div>
-  </a>
 </div>
-<footer><p>Pulse — AI × Design, distilled weekly · <a href="/">Latest</a> · <a href="/info.html">Info</a></p></footer>
+
+<footer><p>Pulse — AI × Product, distilled weekly · <a href="/">Latest</a> · <a href="/info.html">Info</a></p></footer>
+
 </body>
 </html>

@@ -10,7 +10,7 @@
 
 [data-theme="dark"]{--bg:#060608;--s:#0C0C10;--s2:#121216;--br:#1C1C22;--brl:#2D2D34;--t:#EFECE5;--tm:#908E88;--td:#5A5856;--a:#CDFF64;--ad:rgba(205,255,100,.06);--coral:#FF6B5A;--blue:#5AB8FF;--purple:#B48AFF;--teal:#34D399;--amber:#F59E0B;--tw:#1DA1F2;--li:#0A66C2;--rd:#FF4500;--yt:#FF0000;--fg:#A259FF;--nav-bg:rgba(6,6,8,.78);--sel:rgba(205,255,100,.2);--noise:.018}
 [data-theme="dark"] .c.feat{border-color:rgba(205,255,100,.12);background:linear-gradient(160deg,#0C0C10 60%,rgba(205,255,100,.02))}
-.c.feat{border-color:rgba(75,120,90,.2);background:linear-gradient(160deg,#fff 60%,rgba(75,120,90,.03))}
+.c.feat{border-color:rgba(75,120,90,.2);background:linear-gradient(160deg,var(--s) 60%,rgba(61,122,80,.03))}
 .p-fg{color:var(--fg);background:rgba(123,93,175,.06);border:1px solid rgba(123,93,175,.14)}
 .p-tw{color:var(--tw);background:rgba(26,140,216,.06);border:1px solid rgba(26,140,216,.14)}
 .p-yt{color:var(--yt);background:rgba(204,0,0,.06);border:1px solid rgba(204,0,0,.12)}
@@ -96,7 +96,8 @@ a.p:hover{transform:scale(1.06);filter:brightness(1.15)}
 .p-nl{color:var(--purple);background:rgba(180,138,255,.05);border:1px solid rgba(180,138,255,.14)}
 .p-web{color:var(--blue);background:rgba(90,184,255,.05);border:1px solid rgba(90,184,255,.14)}
 .p-forum{color:var(--amber);background:rgba(245,158,11,.05);border:1px solid rgba(245,158,11,.14)}
-.p-m{color:var(--td);background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.05);font-family:var(--mono);font-weight:500;font-size:9px;padding:3px 8px}
+.p-m{color:var(--td);background:rgba(0,0,0,.03);border:1px solid rgba(0,0,0,.06);font-family:var(--mono);font-weight:500;font-size:9px;padding:3px 8px}
+[data-theme="dark"] .p-m{color:var(--td);background:rgba(255,255,255,.03);border-color:rgba(255,255,255,.06)}
 
 /* pull quote */
 .pull{margin:8px 0 22px;padding:20px 24px;border-left:3px solid var(--a);background:var(--ad);border-radius:0 14px 14px 0}
@@ -197,7 +198,7 @@ function toggleTheme(){
   <section class="hero">
     <div class="hp"><span class="dot"></span> Updated every Monday</div>
     <h1>AI × Product<br><em>distilled weekly.</em></h1>
-    <p class="dk">Every Monday we scan Reddit, LinkedIn, Twitter, YouTube, podcasts, and newsletters — then distill the 10 things designers and PMs actually need to know about AI this week.</p>
+    <p class="dk">Every week we read through Reddit, LinkedIn, Twitter, YouTube, podcasts, and newsletters so you don't have to — and pull out the stories that actually matter for designers and PMs working with AI.</p>
     <div class="srcs">
       <span class="sr"><i style="background:var(--tw)"></i> Twitter/X</span>
       <span class="sr"><i style="background:var(--li)"></i> LinkedIn</span>
@@ -218,8 +219,8 @@ function toggleTheme(){
   <div class="sl">The big story</div>
 
   <div class="c feat" onclick="go('https://cursor.com/blog/cursor-3')(event)">
-    <h3><a href="https://cursor.com/blog/cursor-3" target="_blank">Cursor 3 ships — and it's not an IDE anymore. It's an agent control room.</a></h3>
-    <p>Cursor 3 launched April 2 with a completely new interface built from scratch around managing fleets of agents — not writing code. The Agents Window lets you run multiple agents in parallel across local, cloud, and remote environments. Design Mode lets you click directly on browser UI elements to give agents precise visual feedback, which is massive for designers prototyping in code. The top Hacker News comment: "I still want to code, not vibe my way through tickets." Cursor's response: the IDE still exists. Both are telling the truth.</p>
+    <h3><a href="https://cursor.com/blog/cursor-3" target="_blank">Cursor 3 is here — and it's built around agents, not code</a></h3>
+    <p>Cursor shipped a completely new interface this week — and it's a big philosophical shift. Instead of one AI helping you write code, the new Agents Window lets you run multiple agents in parallel across local and cloud environments. The interesting part for designers: Design Mode lets you click directly on UI elements in the browser and tell the agent what to change, visually. Worth knowing about even if you don't code — this is where the "design in the browser" conversation is heading. The HN reaction was mixed: top comment said "I still want to code." A Cursor engineer replied: the old IDE still works. Both can coexist.</p>
     <div class="pills">
       <a href="https://cursor.com/blog/cursor-3" target="_blank" class="p p-web">Cursor Blog</a>
       <a href="https://cursor.com/changelog/3-0" target="_blank" class="p p-web">Changelog</a>
@@ -233,7 +234,7 @@ function toggleTheme(){
   <div class="g2">
     <div class="c sm" onclick="go('https://www.figma.com/blog/the-figma-canvas-is-now-open-to-agents/')(event)">
       <h3><a href="https://www.figma.com/blog/the-figma-canvas-is-now-open-to-agents/" target="_blank">Figma opens write access to AI agents</a></h3>
-      <p>Agents can now create and modify real design assets via MCP — using your components, variables, and tokens. They shipped Skills: markdown files that teach agents how your team works. Free during beta, 10+ MCP clients supported. The question isn't if agents will design — it's who writes the rules they follow.</p>
+      <p>Figma now lets AI agents create and edit real design assets in your files — not just read them. Agents can use your actual components, variables, and tokens. They also introduced Skills, which are markdown files that teach agents how your team specifically works. It's free during the beta. Bitovi ran the first structured test and found components worked well but auto-layout was inconsistent. Worth experimenting with now while it's free.</p>
       <div class="pills">
         <a href="https://www.figma.com/blog/the-figma-canvas-is-now-open-to-agents/" target="_blank" class="p p-fg">Figma Blog</a>
         <a href="https://www.bitovi.com/blog/figma-just-opened-the-canvas-to-agents.-heres-what-actually-happens" target="_blank" class="p p-web">Bitovi test</a>
@@ -242,7 +243,7 @@ function toggleTheme(){
     </div>
     <div class="c sm" onclick="go('https://lovable.dev')(event)">
       <h3><a href="https://lovable.dev" target="_blank">Lovable hit $200M ARR in one year</a></h3>
-      <p>The vibe-coding platform went from zero to $200M ARR faster than almost any software company in history. Their pitch: "minimal lovable product" replacing MVP. Designers and PMs are building production apps from prompts — no developer, no design queue. Influencer marketing is 10x bigger for them than paid social. The growth story was the biggest Lenny's Podcast episode this quarter.</p>
+      <p>Lovable went from zero to $200M ARR in one year, which is genuinely rare. The pitch is simple: describe what you want in plain English and get a working app. Designers and PMs are using it to skip the developer queue entirely — build a prototype, show stakeholders, iterate. The Lenny's Podcast episode on their growth story is worth a listen if you're curious about where no-code tools are actually heading.</p>
       <div class="pills">
         <a href="https://lennydistilled.com/episodes/the-new-ai-growth-playbook-for-2026-how-lovable-hit-200m-arr-in-one-year/" target="_blank" class="p p-nl">Lenny's Podcast</a>
         <span class="p p-m">💰 $200M ARR</span>
@@ -251,7 +252,7 @@ function toggleTheme(){
     </div>
   </div>
 
-  <p class="blurb"><strong>Our read:</strong> Two different bets on the same future. Cursor says developers manage agent fleets. Lovable says non-developers skip the fleet entirely. Both are right — for different people. The designer's job is increasingly to define <em>what good looks like</em> clearly enough that either path works.</p>
+  <p class="blurb"><strong>Our read:</strong> Two very different bets on the same future. Cursor is building for developers who want to manage agent fleets. Lovable is building for everyone else who just wants to skip straight to a working app. Both are growing fast — which probably means both are right, just for different people.</p>
 
   <!-- ═══ COMMUNITY ═══ -->
   <div class="sl">What the community is saying</div>
@@ -263,7 +264,7 @@ function toggleTheme(){
 
   <div class="c" onclick="go('https://medium.com/design-bootcamp/product-designers-are-not-being-replaced-they-are-being-sorted-6e2fb0492ed2')(event)">
     <h3 style="font-size:21px"><a href="https://medium.com/design-bootcamp/product-designers-are-not-being-replaced-they-are-being-sorted-6e2fb0492ed2" target="_blank">"Designers are not being replaced. They are being sorted."</a></h3>
-    <p>The most shared design × AI piece this month. It cites Figma's hiring data: 73% of managers want AI-tool proficiency, 79% want designers who can design AI products, and more than half are hiring only for senior roles. Jenny Wen's three hiring archetypes: the senior with deep product judgment, the designer close to code, and the "cracked new grad" with no attachment to legacy processes. The article's thesis: two groups are forming and the gap widens every month.</p>
+    <p>This was the most-shared design × AI piece this month, and it's worth reading in full. It pulls from Figma's hiring data: 73% of design managers now want AI-tool proficiency, 79% want people who can design AI products, and over half are only hiring at the senior level. The framing that stuck: there are now three designer archetypes — the senior with deep product judgment, the one close to code, and the "cracked new grad" who has no attachment to old processes. Two groups are forming, and the gap between them grows every month.</p>
     <div class="pills">
       <a href="https://medium.com/design-bootcamp/product-designers-are-not-being-replaced-they-are-being-sorted-6e2fb0492ed2" target="_blank" class="p p-web">Medium / Bootcamp</a>
       <span class="p p-m">📊 cites Figma State of Designer</span>
@@ -274,7 +275,7 @@ function toggleTheme(){
   <div class="g2">
     <div class="c sm" onclick="go('https://verifiedinsider.substack.com/p/operating-as-an-ai-native-product')(event)">
       <h3><a href="https://verifiedinsider.substack.com/p/operating-as-an-ai-native-product" target="_blank">"Operating as an AI-native designer in 2026"</a></h3>
-      <p>The best piece written about how the design role actually works now. Vitor (designer at an AI-native company): "The role shift is from making to deciding. AI produces solid starting points. You evaluate what's worth building." He uses Cursor + Claude Code + a coded design system. No Figma-first workflow.</p>
+      <p>If you read one thing about how the design role is actually changing day-to-day, make it this. A designer at an AI-native company explains his workflow: Cursor + Claude Code + a coded design system. No Figma-first process. His take: "The shift is from making to deciding — AI gives you solid starting points, and your job is evaluating what's actually worth building."</p>
       <div class="pills">
         <a href="https://verifiedinsider.substack.com/p/operating-as-an-ai-native-product" target="_blank" class="p p-nl">Verified Insider</a>
         <span class="p p-m">🧠 best workflow piece</span>
@@ -282,7 +283,7 @@ function toggleTheme(){
     </div>
     <div class="c sm" onclick="go('https://www.humbldesign.io/blog-posts/will-ai-replace-designers-2026')(event)">
       <h3><a href="https://www.humbldesign.io/blog-posts/will-ai-replace-designers-2026" target="_blank">Only 31% of designers use AI for core work</a></h3>
-      <p>Humbl Design's 2026 report with real adoption data: only 31% of designers use AI for core design work vs 59% of developers. AI won't replace designers — but it will "wipe out pixel-pushers." Designers who only care about making things look clean are no different from AI.</p>
+      <p>Some actual numbers on AI adoption in design: only 31% of designers use AI for core work, compared to 59% of developers. That's a big gap. The report is worth skimming — the most interesting finding is that the designers most at risk aren't the ones ignoring AI, but the ones whose entire value was pixel-level execution.</p>
       <div class="pills">
         <a href="https://www.humbldesign.io/blog-posts/will-ai-replace-designers-2026" target="_blank" class="p p-web">Humbl Design</a>
         <span class="p p-m">📊 data report</span>
@@ -291,7 +292,7 @@ function toggleTheme(){
     </div>
   </div>
 
-  <p class="blurb">The pattern across all of these: <strong>the role isn't shrinking, it's splitting.</strong> One track leads to strategy, evaluation, and system-level thinking. The other track — execution without judgment — is what AI automates. Every source we read this week pointed to the same conclusion from a different angle.</p>
+  <p class="blurb">The pattern across all of these: <strong>the role isn't shrinking — it's splitting.</strong> One track leads toward strategy, evaluation, and system-level thinking. The other track, pure execution without judgment, is what AI is getting good at. Every source we read this week arrived at the same conclusion from a different angle.</p>
 
   <!-- ═══ TOOLS & WORKFLOWS ═══ -->
   <div class="sl">Tools & workflows</div>
@@ -299,7 +300,7 @@ function toggleTheme(){
   <div class="g2">
     <div class="c sm" onclick="go('https://www.onlook.com/')(event)">
       <h3><a href="https://www.onlook.com/" target="_blank">Onlook: "Cursor for designers"</a></h3>
-      <p>Drag-and-drop, rearrange, and scale elements directly in your actual React app — like Figma but editing real code. No terminal needed. One designer called it "Figma and v0 fused into a devilish combo." The boundary between design tool and code editor is melting.</p>
+      <p>This one's worth trying if you work in React. It lets you drag, rearrange, and resize elements directly in your running app — visually, like Figma — but it's editing real code underneath. No terminal needed. It's open source and free. One designer called it "Figma and v0 fused together." If you've been curious about designing in code, this is probably the gentlest on-ramp right now.</p>
       <div class="pills">
         <a href="https://www.onlook.com/" target="_blank" class="p p-web">Onlook</a>
         <span class="p p-m">🆓 open source</span>
@@ -308,7 +309,7 @@ function toggleTheme(){
     </div>
     <div class="c sm" onclick="go('https://justtalkingtech.medium.com/vibe-coding-in-2026-i-tried-cursor-replit-bolt-lovable-and-v0-heres-what-actually-ships-11d0b70cf1d5')(event)">
       <h3><a href="https://justtalkingtech.medium.com/vibe-coding-in-2026-i-tried-cursor-replit-bolt-lovable-and-v0-heres-what-actually-ships-11d0b70cf1d5" target="_blank">"I tried 5 vibe-coding tools. Here's what actually ships."</a></h3>
-      <p>Lovable, Bolt, Replit, v0, Cursor — same project, one week. Lovable: beautiful in 4 minutes, broke on real logic. Replit: chaotic but the final product was amazing. v0: best if you already code. Cursor: not for non-coders. The honest conclusion: use Lovable to prototype, then pay a developer. That's still better than 2 years ago.</p>
+      <p>Someone actually tested Lovable, Bolt, Replit, v0, and Cursor on the same project over a week — and wrote up what happened honestly. Lovable looked gorgeous in 4 minutes but broke on real logic. Replit was messy but the end result was solid. v0 is great if you already code. Cursor isn't for non-coders. The takeaway: use Lovable to prototype, then bring in a developer for production. That's still a huge improvement over two years ago.</p>
       <div class="pills">
         <a href="https://justtalkingtech.medium.com/vibe-coding-in-2026-i-tried-cursor-replit-bolt-lovable-and-v0-heres-what-actually-ships-11d0b70cf1d5" target="_blank" class="p p-web">Medium</a>
         <span class="p p-m">🧪 5 tools tested</span>
@@ -319,7 +320,7 @@ function toggleTheme(){
 
   <div class="c" onclick="go('https://muz.li/blog/the-complete-vibe-coding-guide-for-designers-2026/')(event)">
     <h3 style="font-size:21px"><a href="https://muz.li/blog/the-complete-vibe-coding-guide-for-designers-2026/" target="_blank">"AI is the intern. You're the Lead. It runs fast. You decide what ships."</a></h3>
-    <p>Muzli's vibe coding guide for designers — read by 800k+ people. The most common bug isn't technical: AI generates something that looks good and you stop thinking. Their framework: Layer 1 = experiments (most tools stop here). Layer 2 = working product. Layer 3 = production. The guide rates every major tool against this ladder and explains why most vibe-coded projects never leave Layer 1.</p>
+    <p>This guide has been read by 800k+ designers and it's easy to see why. The core insight: the most common problem with vibe coding isn't technical — it's that AI generates something that looks good enough and you stop thinking critically. Their framework breaks tools into three layers: experiments, working product, and production. Most vibe-coded projects never get past Layer 1. Helpful for calibrating your expectations before you dive in.</p>
     <div class="pills">
       <a href="https://muz.li/blog/the-complete-vibe-coding-guide-for-designers-2026/" target="_blank" class="p p-nl">Muzli</a>
       <span class="p p-m">👥 800k readers</span>
@@ -330,15 +331,15 @@ function toggleTheme(){
   <div class="g2">
     <div class="c sm" onclick="go('https://blog.replit.com/vibe-coding-decks-and-dashboards')(event)">
       <h3><a href="https://blog.replit.com/vibe-coding-decks-and-dashboards" target="_blank">PMs are vibe-coding their own dashboards</a></h3>
-      <p>Replit's case study on PMs building slide decks, live dashboards, and launch assets from the same environment they build the product. No tool-switching. No design queue. No waiting for eng. "The PM who prototypes gets better outcomes than the PM who only specs."</p>
+      <p>Interesting case study from Replit on PMs building their own dashboards, slide decks, and launch materials — all in the same environment. No waiting for design or eng. The argument: the PM who can prototype their own ideas gets better outcomes than the PM who only writes specs. Worth reading if you're a PM wondering whether these tools are actually useful for you.</p>
       <div class="pills">
         <a href="https://blog.replit.com/vibe-coding-decks-and-dashboards" target="_blank" class="p p-web">Replit Blog</a>
         <span class="p p-m">📅 this week</span>
       </div>
     </div>
     <div class="c sm" onclick="go('https://forum.figma.com/share-your-feedback-26/figma-make-ai-credit-limits-not-feasible-51713/index4.html')(event)">
-      <h3><a href="https://forum.figma.com/share-your-feedback-26/figma-make-ai-credit-limits-not-feasible-51713/index4.html" target="_blank">Figma's credit revolt: "3,000 credits ≈ 45 minutes"</a></h3>
-      <p>Designers are furious on the Figma Forum. Extra credits cost 5.6x more than a ghost seat. One user burned 600 credits on a failed prompt — zero output. Enforcement started March 18. Multiple threads with 50+ replies each. The AI is good — the pricing makes people afraid to use it.</p>
+      <h3><a href="https://forum.figma.com/share-your-feedback-26/figma-make-ai-credit-limits-not-feasible-51713/index4.html" target="_blank">Figma's AI credit pricing is frustrating designers</a></h3>
+      <p>If you use Figma's AI features, this thread is worth reading. Designers on the Forum are frustrated: 3,000 credits runs out in about 45 minutes of real usage. Extra credits cost 5.6× more than a ghost seat. One person burned 600 credits on a single failed prompt. The consensus isn't that the AI is bad — it's that the pricing makes people hesitant to experiment, which defeats the purpose.</p>
       <div class="pills">
         <a href="https://forum.figma.com/share-your-feedback-26/figma-make-ai-credit-limits-not-feasible-51713/index4.html" target="_blank" class="p p-forum">"Not feasible"</a>
         <a href="https://forum.figma.com/share-your-feedback-26/why-is-1-ai-credit-6x-more-expensive-than-a-full-seat-credit-49944" target="_blank" class="p p-forum">"6x more expensive"</a>
@@ -492,8 +493,8 @@ function toggleTheme(){
 
   <div class="bottom">
     <h2>The bottom line</h2>
-    <p>The design tool landscape fragmented this week. Cursor built an agent control room with visual design feedback built in. Lovable proved non-developers can ship production apps. Onlook merged Figma's editing metaphor with real codebases. And Figma opened its canvas to agents while fighting a credit pricing revolt.</p>
-    <p>The thread connecting all of it: <strong>the designer's value is moving from production to judgment.</strong> Who decides what's worth building. Who writes the rules agents follow. Who evaluates whether the output is good enough. That's not a smaller job — it's a harder one.</p>
+    <p>The design tool landscape is fragmenting in interesting ways. Cursor built an agent control room with visual feedback for designers. Lovable proved that non-developers can ship real apps. Onlook merged Figma's editing model with actual codebases. And Figma opened its canvas to agents while navigating a credit pricing backlash.</p>
+    <p>The thread connecting all of it: <strong>the designer's value is moving from production to judgment.</strong> Deciding what's worth building. Writing the rules that agents follow. Evaluating whether the output is actually good enough. That's not a smaller role — it's a harder one, and a more interesting one.</p>
     <p style="color:var(--td);font-size:12px;margin-top:20px">See you next Monday. — Pulse</p>
   </div>
 
