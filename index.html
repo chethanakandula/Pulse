@@ -167,7 +167,7 @@ function toggleTheme(){
   const btn=document.getElementById('themeBtn');
   if(html.getAttribute('data-theme')==='dark'){
     html.removeAttribute('data-theme');
-    btn.textContent='🌙';
+    btn.textContent='🌕';
     localStorage.setItem('pulse-theme','light');
   }else{
     html.setAttribute('data-theme','dark');
@@ -188,15 +188,15 @@ function toggleTheme(){
 <body>
 
 <nav>
-  <div class="logo"><div class="logo-m"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div><span>Pulse</span><button class="theme-toggle" onclick="toggleTheme()" id="themeBtn" title="Toggle light/dark mode">🌙</button></div>
-  <div style="display:flex;align-items:center;gap:18px"><a href="/" style="color:var(--t);font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase">Latest</a><a href="/info.html" style="color:var(--td);font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase">Info</a></div>
+  <div class="logo"><div class="logo-m"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div><span>Pulse</span><button class="theme-toggle" onclick="toggleTheme()" id="themeBtn" title="Toggle light/dark mode">🌕</button></div>
+  <div style="display:flex;align-items:center;gap:18px"><a href="pulse-final.html" style="color:var(--t);font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase">Latest</a><a href="pulse-info.html" style="color:var(--td);font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase">Info</a></div>
 </nav>
 
 <div class="col">
   <section class="hero">
     <div class="hp"><span class="dot"></span> Updated every Monday</div>
     <h1>AI × Design<br><em>distilled weekly.</em></h1>
-    <p class="dk">A weekly cheat sheet for designers and PMs who want to stay sharp on AI — without doomscrolling six platforms. The tools, the drama, the workflows that actually work.</p>
+    <p class="dk">Every Monday we scan Reddit, LinkedIn, Twitter, YouTube, podcasts, and newsletters — then distill the 10 things designers and PMs actually need to know about AI this week.</p>
     <div class="srcs">
       <span class="sr"><i style="background:var(--tw)"></i> Twitter/X</span>
       <span class="sr"><i style="background:var(--li)"></i> LinkedIn</span>
@@ -359,7 +359,7 @@ function toggleTheme(){
         <div class="src-meta"><span>⬆️ 187</span><span>💬 92 replies</span><span>📅 5 days ago</span></div>
       </div>
     </a>
-    <a href="https://www.linkedin.com/posts/clairevo_ai-agents-workflow" target="_blank" class="src-card">
+    <a href="https://www.linkedin.com/in/clairevo/" target="_blank" class="src-card">
       <div class="src-body">
         <div class="src-from li">Claire Vo · LinkedIn</div>
         <h4>"I now have 9 AI agents running my business."</h4>
