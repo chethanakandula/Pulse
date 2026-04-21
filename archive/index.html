@@ -25,7 +25,15 @@ nav{position:sticky;top:0;z-index:100;padding:12px 24px;display:flex;justify-con
 .empty a{display:inline-block;margin-top:20px;font-size:12px;font-weight:600;color:var(--a);text-decoration:underline;text-underline-offset:3px}
 footer{border-top:1px solid var(--br);padding:20px;text-align:center;font-size:10px;color:var(--td);margin-top:0}footer a{color:var(--tm)}
 </style>
+<script src="https://cdn.amplitude.com/libs/analytics-browser-2.11.1-min.js.gz" integrity="sha384-TQgP6oZ+yX8iXNS4m0H7LuWSyrhEfoifZx/7cP3qSQU869coM2r0irxJEPQ82Nl+" crossorigin="anonymous"></script>
 <script>
+window.amplitude.init('577c366db7be49e45515c173c0bf68c', {
+  serverUrl: 'https://api2.amplitude.com/2/httpapi',
+  autocapture: { pageViews: true, sessions: true }
+});
+window.onerror = function(msg) {
+  window.amplitude.track('error encountered', { error_message: String(msg), error_context: window.location.href, error_category: 'runtime' });
+};
 var moonSVG='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
 var sunSVG='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';
 function toggleTheme(){
@@ -35,10 +43,12 @@ function toggleTheme(){
     html.removeAttribute('data-theme');
     btn.innerHTML=moonSVG;
     localStorage.setItem('pulse-theme','light');
+    window.amplitude.track('theme toggled', { new_theme: 'light' });
   }else{
     html.setAttribute('data-theme','dark');
     btn.innerHTML=sunSVG;
     localStorage.setItem('pulse-theme','dark');
+    window.amplitude.track('theme toggled', { new_theme: 'dark' });
   }
 }
 (function(){
@@ -48,6 +58,15 @@ function toggleTheme(){
     document.addEventListener('DOMContentLoaded',function(){document.getElementById('themeBtn').innerHTML=sunSVG});
   }
 })();
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('nav a').forEach(function(a) {
+    a.addEventListener('click', function() {
+      var href = a.getAttribute('href') || '';
+      var dest = href === '/' ? 'home' : href.replace(/^\/|\.html$/g, '');
+      window.amplitude.track('nav link clicked', { destination: dest, page: 'archive' });
+    });
+  });
+});
 </script>
 </head>
 <body>

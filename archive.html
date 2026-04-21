@@ -18,14 +18,30 @@ nav{position:sticky;top:0;z-index:100;padding:12px 24px;display:flex;justify-con
 .logo{display:flex;align-items:center;gap:8px}.logo-m{width:26px;height:26px;border-radius:6px;background:var(--a);display:flex;align-items:center;justify-content:center}.logo-m svg{width:13px;height:13px}.logo span{font-family:var(--serif);font-size:19px;font-weight:500}
 .nav-r{display:flex;align-items:center;gap:18px}.nav-r a{color:var(--td);font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase}
 .col{max-width:800px;margin:0 auto;padding:0 28px}
-.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 28px 160px}
-.empty-ico{width:56px;height:56px;border-radius:14px;background:var(--ad);border:1px solid var(--br);display:flex;align-items:center;justify-content:center;margin-bottom:20px;color:var(--a)}
-.empty h1{font-family:var(--serif);font-size:28px;font-weight:400;letter-spacing:-.02em;margin-bottom:10px}
-.empty p{font-size:15px;color:var(--tm);line-height:1.7;max-width:400px}
-.empty a{display:inline-block;margin-top:20px;font-size:12px;font-weight:600;color:var(--a);text-decoration:underline;text-underline-offset:3px}
+.page-head{padding:64px 0 8px;text-align:center}.page-head h1{font-family:var(--serif);font-size:36px;font-weight:400;letter-spacing:-.02em;margin-bottom:10px}.page-head p{font-size:15px;color:var(--tm);line-height:1.7;max-width:440px;margin:0 auto}
+.sep{border:none;border-top:1px solid var(--br);margin:28px 0}
+.issue-list{display:flex;flex-direction:column;gap:0;padding:8px 0 48px}
+.issue-row{display:flex;align-items:baseline;gap:20px;padding:20px 0;border-bottom:1px solid var(--br);text-decoration:none;color:inherit;transition:all .18s;cursor:pointer}
+.issue-row:hover .issue-title{color:var(--a);text-decoration:underline;text-decoration-color:rgba(75,120,90,.4);text-underline-offset:3px}
+.issue-row:hover .issue-arrow{opacity:1;transform:translateX(2px)}
+.issue-num{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--a);min-width:36px;flex-shrink:0}
+.issue-body{flex:1;min-width:0}
+.issue-title{font-family:var(--serif);font-size:18px;font-weight:400;line-height:1.3;margin-bottom:4px;transition:color .18s}
+.issue-sub{font-size:13px;color:var(--tm);line-height:1.5}
+.issue-meta{display:flex;align-items:center;gap:16px;flex-shrink:0}
+.issue-date{font-family:var(--mono);font-size:11px;color:var(--td)}
+.issue-arrow{font-size:14px;color:var(--a);opacity:0;transition:all .18s}
 footer{border-top:1px solid var(--br);padding:20px;text-align:center;font-size:10px;color:var(--td);margin-top:0}footer a{color:var(--tm)}
 </style>
+<script src="https://cdn.amplitude.com/libs/analytics-browser-2.11.1-min.js.gz" integrity="sha384-TQgP6oZ+yX8iXNS4m0H7LuWSyrhEfoifZx/7cP3qSQU869coM2r0irxJEPQ82Nl+" crossorigin="anonymous"></script>
 <script>
+window.amplitude.init('577c366db7be49e45515c173c0bf68c', {
+  serverUrl: 'https://api2.amplitude.com/2/httpapi',
+  autocapture: { pageViews: true, sessions: true }
+});
+window.onerror = function(msg) {
+  window.amplitude.track('error encountered', { error_message: String(msg), error_context: window.location.href, error_category: 'runtime' });
+};
 var moonSVG='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
 var sunSVG='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';
 function toggleTheme(){
@@ -35,10 +51,12 @@ function toggleTheme(){
     html.removeAttribute('data-theme');
     btn.innerHTML=moonSVG;
     localStorage.setItem('pulse-theme','light');
+    window.amplitude.track('theme toggled', { new_theme: 'light' });
   }else{
     html.setAttribute('data-theme','dark');
     btn.innerHTML=sunSVG;
     localStorage.setItem('pulse-theme','dark');
+    window.amplitude.track('theme toggled', { new_theme: 'dark' });
   }
 }
 (function(){
@@ -48,6 +66,22 @@ function toggleTheme(){
     document.addEventListener('DOMContentLoaded',function(){document.getElementById('themeBtn').innerHTML=sunSVG});
   }
 })();
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('nav a').forEach(function(a) {
+    a.addEventListener('click', function() {
+      var href = a.getAttribute('href') || '';
+      var dest = href === '/' ? 'home' : href.replace(/^\/|\.html$/g, '');
+      window.amplitude.track('nav link clicked', { destination: dest, page: 'archive' });
+    });
+  });
+  document.querySelectorAll('a[href]').forEach(function(a) {
+    if(a.closest('.empty')) {
+      a.addEventListener('click', function() {
+        window.amplitude.track('archive issue clicked', { destination_url: a.href, issue_title: a.textContent.trim() });
+      });
+    }
+  });
+});
 </script>
 </head>
 <body>
@@ -58,11 +92,36 @@ function toggleTheme(){
 </nav>
 
 <div class="col">
-  <div class="empty">
-    <div class="empty-ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg></div>
+  <div class="page-head">
     <h1>Archive</h1>
-    <p>Every past issue of Pulse will live here. We're just getting started — check back after a few Mondays.</p>
-    <a href="/">Read the latest issue →</a>
+    <p>Every issue of Pulse — the AI × product stories that actually mattered each week.</p>
+  </div>
+
+  <hr class="sep">
+
+  <div class="issue-list">
+    <a href="/archive/15/" class="issue-row">
+      <span class="issue-num">#15</span>
+      <div class="issue-body">
+        <div class="issue-title">The supplier becomes the competitor</div>
+        <div class="issue-sub">Anthropic launches Claude Design, Figma stock drops 7%, and the companies that built on Anthropic start quietly decoupling.</div>
+      </div>
+      <div class="issue-meta">
+        <span class="issue-date">Apr 14 → 21</span>
+        <span class="issue-arrow">→</span>
+      </div>
+    </a>
+    <a href="/archive/14/" class="issue-row">
+      <span class="issue-num">#14</span>
+      <div class="issue-body">
+        <div class="issue-title">The tools are splitting</div>
+        <div class="issue-sub">Cursor 3 ships an agent control room, Lovable hits $200M ARR, and Figma opens its canvas to AI agents.</div>
+      </div>
+      <div class="issue-meta">
+        <span class="issue-date">Apr 7 → 14</span>
+        <span class="issue-arrow">→</span>
+      </div>
+    </a>
   </div>
 </div>
 

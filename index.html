@@ -161,7 +161,23 @@ footer a{color:var(--tm)}
 .c,.vid-card,.src-card{opacity:0;animation:ci .45s ease-out forwards}
 @keyframes ci{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 </style>
+<script src="https://cdn.amplitude.com/libs/analytics-browser-2.11.1-min.js.gz" integrity="sha384-TQgP6oZ+yX8iXNS4m0H7LuWSyrhEfoifZx/7cP3qSQU869coM2r0irxJEPQ82Nl+" crossorigin="anonymous"></script>
 <script>
+// Amplitude init
+window.amplitude.init('577c366db7be49e45515c173c0bf68c', {
+  serverUrl: 'https://api2.amplitude.com/2/httpapi',
+  autocapture: { pageViews: true, sessions: true }
+});
+
+// Error tracking
+window.onerror = function(msg, src, line, col, err) {
+  window.amplitude.track('error encountered', {
+    error_message: String(msg),
+    error_context: window.location.href,
+    error_category: 'runtime'
+  });
+};
+
 function go(u){return function(e){if(!e.target.closest('a'))window.open(u,'_blank')}}
 var moonSVG='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
 var sunSVG='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';
@@ -172,10 +188,12 @@ function toggleTheme(){
     html.removeAttribute('data-theme');
     btn.innerHTML=moonSVG;
     localStorage.setItem('pulse-theme','light');
+    window.amplitude.track('theme toggled', { new_theme: 'light' });
   }else{
     html.setAttribute('data-theme','dark');
     btn.innerHTML=sunSVG;
     localStorage.setItem('pulse-theme','dark');
+    window.amplitude.track('theme toggled', { new_theme: 'dark' });
   }
 }
 (function(){
@@ -185,6 +203,119 @@ function toggleTheme(){
     document.addEventListener('DOMContentLoaded',function(){document.getElementById('themeBtn').innerHTML=sunSVG});
   }
 })();
+
+// Nav tracking
+document.addEventListener('DOMContentLoaded', function() {
+  // Nav links
+  document.querySelectorAll('nav a').forEach(function(a) {
+    a.addEventListener('click', function() {
+      var href = a.getAttribute('href') || '';
+      var dest = href === '/' ? 'home' : href.replace(/^\/|\.html$/g, '');
+      window.amplitude.track('nav link clicked', { destination: dest, page: 'home' });
+    });
+  });
+
+  // Article links inside content cards (.c cards — heading anchors)
+  document.querySelectorAll('.c h3 a[href]').forEach(function(a) {
+    a.addEventListener('click', function(e) {
+      e.stopPropagation();
+      var card = a.closest('.c');
+      var cardType = card.classList.contains('feat') ? 'featured' : 'standard';
+      var srcType = 'web';
+      var pill = card.querySelector('.p');
+      if(pill){
+        if(pill.classList.contains('p-nl')) srcType='newsletter';
+        else if(pill.classList.contains('p-tw')) srcType='twitter';
+        else if(pill.classList.contains('p-yt')) srcType='youtube';
+        else if(pill.classList.contains('p-rd')) srcType='reddit';
+        else if(pill.classList.contains('p-forum')) srcType='forum';
+        else if(pill.classList.contains('p-fg')) srcType='blog';
+      }
+      window.amplitude.track('article link clicked', {
+        article_title: a.textContent.trim(),
+        destination_url: a.href,
+        source_type: srcType,
+        issue_number: 15,
+        card_type: cardType
+      });
+    });
+  });
+
+  // Source cards (.src-card)
+  document.querySelectorAll('a.src-card[href]').forEach(function(a) {
+    a.addEventListener('click', function() {
+      var h4 = a.querySelector('h4');
+      var srcFrom = a.querySelector('.src-from');
+      var srcType = 'web';
+      if(srcFrom){
+        if(srcFrom.classList.contains('rd')) srcType='reddit';
+        else if(srcFrom.classList.contains('li')) srcType='newsletter';
+        else if(srcFrom.classList.contains('pod')) srcType='podcast';
+        else if(srcFrom.classList.contains('tw')) srcType='twitter';
+      }
+      window.amplitude.track('article link clicked', {
+        article_title: h4 ? h4.textContent.trim() : '',
+        destination_url: a.href,
+        source_type: srcType,
+        issue_number: 15,
+        card_type: 'source'
+      });
+    });
+  });
+
+  // Source pills (.p with href)
+  document.querySelectorAll('a.p[href]').forEach(function(a) {
+    a.addEventListener('click', function(e) {
+      e.stopPropagation();
+      window.amplitude.track('source pill clicked', {
+        pill_label: a.textContent.trim(),
+        destination_url: a.href,
+        issue_number: 15
+      });
+    });
+  });
+
+  // Video/podcast cards (.vid-card)
+  document.querySelectorAll('a.vid-card[href]').forEach(function(a) {
+    a.addEventListener('click', function() {
+      var h4 = a.querySelector('h4');
+      var label = a.querySelector('.vt-label');
+      var dur = a.querySelector('.vt-dur');
+      var sub = a.querySelector('.vid-body p');
+      var mediaType = label && label.textContent.indexOf('Podcast') > -1 ? 'podcast' : 'video';
+      window.amplitude.track('video card clicked', {
+        video_title: h4 ? h4.textContent.trim() : '',
+        media_type: mediaType,
+        duration: dur ? dur.textContent.trim() : '',
+        source: sub ? sub.textContent.trim() : '',
+        issue_number: 15
+      });
+    });
+  });
+
+  // Try prompts
+  document.querySelectorAll('.try a[href]').forEach(function(a) {
+    a.addEventListener('click', function() {
+      var tryEl = a.closest('.try');
+      var h4 = tryEl ? tryEl.querySelector('h4') : null;
+      var dur = tryEl ? tryEl.querySelector('.try-t') : null;
+      window.amplitude.track('try prompt clicked', {
+        try_title: h4 ? h4.textContent.trim() : '',
+        try_duration: dur ? dur.textContent.trim() : '',
+        destination_url: a.href,
+        issue_number: 15
+      });
+    });
+  });
+
+  // Subscribe form
+  var subBtn = document.querySelector('.cta-f button');
+  if(subBtn) {
+    subBtn.addEventListener('click', function() {
+      window.amplitude.track('newsletter subscribed', { page: 'home', issue_number: 15 });
+    });
+  }
+});
 </script>
 </head>
 <body>
@@ -213,138 +344,116 @@ function toggleTheme(){
 <hr class="sep">
 
 <div class="col">
-  <div class="ib"><h2>Issue #14 — The tools are splitting</h2><span>Apr 7 → 14</span></div>
+  <div class="ib"><h2>Issue #15 — The supplier becomes the competitor</h2><span>Apr 14 → 21</span></div>
 
   <!-- ═══ BIG STORY ═══ -->
   <div class="sl">The big story</div>
 
-  <div class="c feat" onclick="go('https://cursor.com/blog/cursor-3')(event)">
-    <h3><a href="https://cursor.com/blog/cursor-3" target="_blank">Cursor 3 is here — and it's built around agents, not code</a></h3>
-    <p>Cursor shipped a completely new interface this week — and it's a big philosophical shift. Instead of one AI helping you write code, the new Agents Window lets you run multiple agents in parallel across local and cloud environments. The interesting part for designers: Design Mode lets you click directly on UI elements in the browser and tell the agent what to change, visually. Worth knowing about even if you don't code — this is where the "design in the browser" conversation is heading. The HN reaction was mixed: top comment said "I still want to code." A Cursor engineer replied: the old IDE still works. Both can coexist.</p>
+  <div class="c feat" onclick="go('https://techcrunch.com/2026/04/17/anthropic-launches-claude-design-a-new-product-for-creating-quick-visuals/')(event)">
+    <h3><a href="https://techcrunch.com/2026/04/17/anthropic-launches-claude-design-a-new-product-for-creating-quick-visuals/" target="_blank">Anthropic launches Claude Design — and Figma stock drops 7%</a></h3>
+    <p>Three events happened in three days. Anthropic's CPO Mike Krieger quietly stepped off Figma's board on April 14. Claude Opus 4.7 shipped on April 16 with high-resolution vision and an 87.6% SWE-bench score. Claude Design launched on April 17 — a tool that turns prompts into prototypes, slides, one-pagers, and implementation bundles that feed directly into Claude Code. Figma lost 7% of its market value within hours. The competitive logic is stark: Figma pays API fees to Anthropic for Sonnet 4.5; Claude Design runs Opus 4.7 internally at no inference cost. "It's very difficult to compete on AI against the company that provides your AI inference," one analyst wrote.</p>
     <div class="pills">
-      <a href="https://cursor.com/blog/cursor-3" target="_blank" class="p p-web">Cursor Blog</a>
-      <a href="https://cursor.com/changelog/3-0" target="_blank" class="p p-web">Changelog</a>
-      <a href="https://techcrunch.com/2026/03/05/cursor-is-rolling-out-a-new-system-for-agentic-coding/" target="_blank" class="p p-web">TechCrunch</a>
-      <span class="p p-m">💰 $2B ARR</span>
-      <span class="p p-m">🏢 100% adoption at Datadog</span>
-      <span class="p p-m">📅 Apr 2</span>
+      <a href="https://techcrunch.com/2026/04/17/anthropic-launches-claude-design-a-new-product-for-creating-quick-visuals/" target="_blank" class="p p-web">TechCrunch</a>
+      <a href="https://venturebeat.com/technology/anthropic-just-launched-claude-design-an-ai-tool-that-turns-prompts-into-prototypes-and-challenges-figma" target="_blank" class="p p-web">VentureBeat</a>
+      <a href="https://gizmodo.com/anthropic-launches-claude-design-figma-stock-immediately-nosedives-2000748071" target="_blank" class="p p-web">Gizmodo</a>
+      <span class="p p-m">📉 Figma -7%</span>
+      <span class="p p-m">💰 Anthropic $30B ARR</span>
+      <span class="p p-m">📅 Apr 17</span>
     </div>
   </div>
 
   <div class="g2">
-    <div class="c sm" onclick="go('https://www.figma.com/blog/the-figma-canvas-is-now-open-to-agents/')(event)">
-      <h3><a href="https://www.figma.com/blog/the-figma-canvas-is-now-open-to-agents/" target="_blank">Figma opens write access to AI agents</a></h3>
-      <p>Figma now lets AI agents create and edit real design assets in your files — not just read them. Agents can use your actual components, variables, and tokens. They also introduced Skills, which are markdown files that teach agents how your team specifically works. It's free during the beta. Bitovi ran the first structured test and found components worked well but auto-layout was inconsistent. Worth experimenting with now while it's free.</p>
+    <div class="c sm" onclick="go('https://techcrunch.com/2026/04/16/anthropic-cpo-leaves-figmas-board-after-reports-he-will-offer-a-competing-product/')(event)">
+      <h3><a href="https://techcrunch.com/2026/04/16/anthropic-cpo-leaves-figmas-board-after-reports-he-will-offer-a-competing-product/" target="_blank">Mike Krieger exits Figma's board — the tell</a></h3>
+      <p>Instagram co-founder, Anthropic CPO. Left the board on April 14 — three days before Claude Design launched. Analysts called it "a canary in the coal mine for SaaS." Frontier labs are no longer content to be model suppliers. They want the application layer. The pattern is now visible across developer tools, search, office software, and design.</p>
       <div class="pills">
-        <a href="https://www.figma.com/blog/the-figma-canvas-is-now-open-to-agents/" target="_blank" class="p p-fg">Figma Blog</a>
-        <a href="https://www.bitovi.com/blog/figma-just-opened-the-canvas-to-agents.-heres-what-actually-happens" target="_blank" class="p p-web">Bitovi test</a>
-        <span class="p p-m">📡 171 mentions/mo</span>
+        <a href="https://techcrunch.com/2026/04/16/anthropic-cpo-leaves-figmas-board-after-reports-he-will-offer-a-competing-product/" target="_blank" class="p p-web">TechCrunch</a>
+        <span class="p p-m">📅 Apr 14</span>
+        <span class="p p-m">📉 -9% on announcement</span>
       </div>
     </div>
-    <div class="c sm" onclick="go('https://lovable.dev')(event)">
-      <h3><a href="https://lovable.dev" target="_blank">Lovable hit $200M ARR in one year</a></h3>
-      <p>Lovable went from zero to $200M ARR in one year, which is genuinely rare. The pitch is simple: describe what you want in plain English and get a working app. Designers and PMs are using it to skip the developer queue entirely — build a prototype, show stakeholders, iterate. The Lenny's Podcast episode on their growth story is worth a listen if you're curious about where no-code tools are actually heading.</p>
+    <div class="c sm" onclick="go('https://venturebeat.com/technology/anthropic-just-launched-claude-design-an-ai-tool-that-turns-prompts-into-prototypes-and-challenges-figma')(event)">
+      <h3><a href="https://venturebeat.com/technology/anthropic-just-launched-claude-design-an-ai-tool-that-turns-prompts-into-prototypes-and-challenges-figma" target="_blank">Figma's quiet pivot: Gemini, OpenAI — not Anthropic</a></h3>
+      <p>Dylan Field posted on LinkedIn about Claude Sonnet 4.5 in Figma Make — but the broader picture is sharper. Figma's AI now runs on Gemini 3.0 Pro and OpenAI GPT Image models. They're not buying Opus 4.7. Cursor is adding Kimi K2.5 from China. The companies that built on Anthropic are quietly decoupling from the company that just became their competitor.</p>
       <div class="pills">
-        <a href="https://lennydistilled.com/episodes/the-new-ai-growth-playbook-for-2026-how-lovable-hit-200m-arr-in-one-year/" target="_blank" class="p p-nl">Lenny's Podcast</a>
-        <span class="p p-m">💰 $200M ARR</span>
-        <span class="p p-m">📅 1 year</span>
+        <a href="https://venturebeat.com/technology/anthropic-just-launched-claude-design-an-ai-tool-that-turns-prompts-into-prototypes-and-challenges-figma" target="_blank" class="p p-web">VentureBeat</a>
+        <span class="p p-m">🔄 strategic decoupling</span>
       </div>
     </div>
   </div>
 
-  <p class="blurb"><strong>Our read:</strong> Two very different bets on the same future. Cursor is building for developers who want to manage agent fleets. Lovable is building for everyone else who just wants to skip straight to a working app. Both are growing fast — which probably means both are right, just for different people.</p>
+  <p class="blurb"><strong>Our read:</strong> This is the SaaS dependency trap made visible in one week. Figma, Lovable, and Cursor all built on Anthropic's models — and now Anthropic has walked through the door they built. The "SAASpocalypse" thesis says frontier labs eventually consume the apps they serve. This week gave us the first clean example.</p>
 
   <!-- ═══ COMMUNITY ═══ -->
   <div class="sl">What the community is saying</div>
 
   <div class="pull">
-    <p>"This design process that designers have been taught, we sort of treat it as gospel. That's basically dead."</p>
-    <div class="attr">— Jenny Wen (head of design, Claude/Anthropic), <a href="https://www.lennysnewsletter.com/p/the-design-process-is-dead" target="_blank">Lenny's Podcast</a></div>
+    <p>"Every app looks identical — same serif font, same blinking status dot, same container soup of pills and cards. Unless you upload reference screenshots, the output screams 'I just used one Claude prompt.'"</p>
+    <div class="attr">— r/ClaudeAI, <a href="https://www.theneurondaily.com/p/anthropic-s-claude-design-launched-and-reddit-has-thoughts" target="_blank">The Neuron Daily roundup</a></div>
   </div>
 
-  <div class="c" onclick="go('https://medium.com/design-bootcamp/product-designers-are-not-being-replaced-they-are-being-sorted-6e2fb0492ed2')(event)">
-    <h3 style="font-size:21px"><a href="https://medium.com/design-bootcamp/product-designers-are-not-being-replaced-they-are-being-sorted-6e2fb0492ed2" target="_blank">"Designers are not being replaced. They are being sorted."</a></h3>
-    <p>This was the most-shared design × AI piece this month, and it's worth reading in full. It pulls from Figma's hiring data: 73% of design managers now want AI-tool proficiency, 79% want people who can design AI products, and over half are only hiring at the senior level. The framing that stuck: there are now three designer archetypes — the senior with deep product judgment, the one close to code, and the "cracked new grad" who has no attachment to old processes. Two groups are forming, and the gap between them grows every month.</p>
+  <div class="c" onclick="go('https://www.theneurondaily.com/p/anthropic-s-claude-design-launched-and-reddit-has-thoughts')(event)">
+    <h3><a href="https://www.theneurondaily.com/p/anthropic-s-claude-design-launched-and-reddit-has-thoughts" target="_blank">Reddit's verdict on Claude Design: "Resounding meh" — with caveats</a></h3>
+    <p>The r/ClaudeAI launch reaction landed somewhere between skepticism and frustration. Token burn was the #1 complaint: 2–3 full prompts can exhaust weekly Pro limits, and one user reported hitting their session cap in under 10 minutes on launch day. The aesthetic critique was consistent — uniform serif fonts, identical blinking status dots, "container soup" card layouts. The real signal buried in the thread: non-developers are discovering Claude for the first time through Design demos. "I shipped a SaaS in one Claude Design chat" posts started appearing within 24 hours. That's a new audience, not the existing user base.</p>
     <div class="pills">
-      <a href="https://medium.com/design-bootcamp/product-designers-are-not-being-replaced-they-are-being-sorted-6e2fb0492ed2" target="_blank" class="p p-web">Medium / Bootcamp</a>
-      <span class="p p-m">📊 cites Figma State of Designer</span>
-      <span class="p p-m">💬 200+ comments</span>
+      <a href="https://www.theneurondaily.com/p/anthropic-s-claude-design-launched-and-reddit-has-thoughts" target="_blank" class="p p-web">The Neuron Daily</a>
+      <a href="https://botmonster.com/posts/claude-opus-4-7-x-reddit-reception/" target="_blank" class="p p-web">Botmonster</a>
+      <span class="p p-m">💬 r/ClaudeAI</span>
+      <span class="p p-m">🔥 viral week</span>
     </div>
   </div>
 
   <div class="g2">
-    <div class="c sm" onclick="go('https://verifiedinsider.substack.com/p/operating-as-an-ai-native-product')(event)">
-      <h3><a href="https://verifiedinsider.substack.com/p/operating-as-an-ai-native-product" target="_blank">"Operating as an AI-native designer in 2026"</a></h3>
-      <p>If you read one thing about how the design role is actually changing day-to-day, make it this. A designer at an AI-native company explains his workflow: Cursor + Claude Code + a coded design system. No Figma-first process. His take: "The shift is from making to deciding — AI gives you solid starting points, and your job is evaluating what's actually worth building."</p>
+    <div class="c sm" onclick="go('https://medium.com/design-bootcamp/what-claude-design-actually-changes-for-designers-0c5b04fae343')(event)">
+      <h3><a href="https://medium.com/design-bootcamp/what-claude-design-actually-changes-for-designers-0c5b04fae343" target="_blank">"Is this the moment the pipeline finally becomes the product?"</a></h3>
+      <p>Bootcamp / Medium ran the most substantive designer take on the launch. The framing that stuck: when you're happy with a prototype, Claude Design packages it as an implementation bundle — components, design tokens, copy, interaction notes — passed directly to Claude Code. "It feels less like a new product and more like a resolved argument." The missing link between design and shipping, finally connected.</p>
       <div class="pills">
-        <a href="https://verifiedinsider.substack.com/p/operating-as-an-ai-native-product" target="_blank" class="p p-nl">Verified Insider</a>
-        <span class="p p-m">🧠 best workflow piece</span>
+        <a href="https://medium.com/design-bootcamp/what-claude-design-actually-changes-for-designers-0c5b04fae343" target="_blank" class="p p-web">Medium / Bootcamp</a>
+        <span class="p p-m">💬 designer perspective</span>
       </div>
     </div>
-    <div class="c sm" onclick="go('https://www.humbldesign.io/blog-posts/will-ai-replace-designers-2026')(event)">
-      <h3><a href="https://www.humbldesign.io/blog-posts/will-ai-replace-designers-2026" target="_blank">Only 31% of designers use AI for core work</a></h3>
-      <p>Some actual numbers on AI adoption in design: only 31% of designers use AI for core work, compared to 59% of developers. That's a big gap. The report is worth skimming — the most interesting finding is that the designers most at risk aren't the ones ignoring AI, but the ones whose entire value was pixel-level execution.</p>
+    <div class="c sm" onclick="go('https://www.pymnts.com/artificial-intelligence-2/2026/anthropics-new-design-tool-rivals-adobe-and-figma/')(event)">
+      <h3><a href="https://www.pymnts.com/artificial-intelligence-2/2026/anthropics-new-design-tool-rivals-adobe-and-figma/" target="_blank">Twitter split: "RIP designers" vs "another AI slop feature"</a></h3>
+      <p>Demos framed as "killing Figma" drove the biggest organic reach all week. The people most excited weren't designers — they were founders and PMs who never used Figma, seeing prototype-quality output for the first time. Designers themselves were divided: some saw the implementation bundle as the real story; others dismissed it as a high-end template generator. The gap in reactions tracks almost perfectly with seniority.</p>
       <div class="pills">
-        <a href="https://www.humbldesign.io/blog-posts/will-ai-replace-designers-2026" target="_blank" class="p p-web">Humbl Design</a>
-        <span class="p p-m">📊 data report</span>
-        <span class="p p-m">📅 2026</span>
+        <a href="https://www.pymnts.com/artificial-intelligence-2/2026/anthropics-new-design-tool-rivals-adobe-and-figma/" target="_blank" class="p p-web">PYMNTS</a>
+        <span class="p p-m">📱 Twitter/X</span>
+        <span class="p p-m">🔥 viral demos</span>
       </div>
     </div>
   </div>
 
-  <p class="blurb">The pattern across all of these: <strong>the role isn't shrinking — it's splitting.</strong> One track leads toward strategy, evaluation, and system-level thinking. The other track, pure execution without judgment, is what AI is getting good at. Every source we read this week arrived at the same conclusion from a different angle.</p>
+  <p class="blurb">The reaction split is the signal. Designers with strong taste and existing systems are mostly unimpressed — the output doesn't clear their bar. Non-designers and early-stage builders are genuinely excited. Both reactions are correct. <strong>Claude Design isn't competing with senior designers — it's removing the barrier that kept non-designers dependent on them.</strong></p>
 
   <!-- ═══ TOOLS & WORKFLOWS ═══ -->
   <div class="sl">Tools & workflows</div>
 
-  <div class="g2">
-    <div class="c sm" onclick="go('https://www.onlook.com/')(event)">
-      <h3><a href="https://www.onlook.com/" target="_blank">Onlook: "Cursor for designers"</a></h3>
-      <p>This one's worth trying if you work in React. It lets you drag, rearrange, and resize elements directly in your running app — visually, like Figma — but it's editing real code underneath. No terminal needed. It's open source and free. One designer called it "Figma and v0 fused together." If you've been curious about designing in code, this is probably the gentlest on-ramp right now.</p>
-      <div class="pills">
-        <a href="https://www.onlook.com/" target="_blank" class="p p-web">Onlook</a>
-        <span class="p p-m">🆓 open source</span>
-        <span class="p p-m">🔥 trending</span>
-      </div>
-    </div>
-    <div class="c sm" onclick="go('https://justtalkingtech.medium.com/vibe-coding-in-2026-i-tried-cursor-replit-bolt-lovable-and-v0-heres-what-actually-ships-11d0b70cf1d5')(event)">
-      <h3><a href="https://justtalkingtech.medium.com/vibe-coding-in-2026-i-tried-cursor-replit-bolt-lovable-and-v0-heres-what-actually-ships-11d0b70cf1d5" target="_blank">"I tried 5 vibe-coding tools. Here's what actually ships."</a></h3>
-      <p>Someone actually tested Lovable, Bolt, Replit, v0, and Cursor on the same project over a week — and wrote up what happened honestly. Lovable looked gorgeous in 4 minutes but broke on real logic. Replit was messy but the end result was solid. v0 is great if you already code. Cursor isn't for non-coders. The takeaway: use Lovable to prototype, then bring in a developer for production. That's still a huge improvement over two years ago.</p>
-      <div class="pills">
-        <a href="https://justtalkingtech.medium.com/vibe-coding-in-2026-i-tried-cursor-replit-bolt-lovable-and-v0-heres-what-actually-ships-11d0b70cf1d5" target="_blank" class="p p-web">Medium</a>
-        <span class="p p-m">🧪 5 tools tested</span>
-        <span class="p p-m">💬 real results</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="c" onclick="go('https://muz.li/blog/the-complete-vibe-coding-guide-for-designers-2026/')(event)">
-    <h3 style="font-size:21px"><a href="https://muz.li/blog/the-complete-vibe-coding-guide-for-designers-2026/" target="_blank">"AI is the intern. You're the Lead. It runs fast. You decide what ships."</a></h3>
-    <p>This guide has been read by 800k+ designers and it's easy to see why. The core insight: the most common problem with vibe coding isn't technical — it's that AI generates something that looks good enough and you stop thinking critically. Their framework breaks tools into three layers: experiments, working product, and production. Most vibe-coded projects never get past Layer 1. Helpful for calibrating your expectations before you dive in.</p>
+  <div class="c" onclick="go('https://www.figma.com/blog/introducing-claude-code-to-figma/')(event)">
+    <h3 style="font-size:21px"><a href="https://www.figma.com/blog/introducing-claude-code-to-figma/" target="_blank">The loop is closed: Claude Code → Figma → Claude Design → Claude Code</a></h3>
+    <p>The Code to Canvas integration finally has a full circuit this week. Type "Send this to Figma" in Claude Code — your running UI converts to editable Figma layers in about 30 seconds. Iterate in Figma Make. Pass the result to Claude Design as a reference. Export the implementation bundle. Back to Claude Code. This bidirectional loop — code → canvas → code — closes the designer-developer handoff argument. For small product teams who can't afford a dedicated handoff process, this is now the default workflow.</p>
     <div class="pills">
-      <a href="https://muz.li/blog/the-complete-vibe-coding-guide-for-designers-2026/" target="_blank" class="p p-nl">Muzli</a>
-      <span class="p p-m">👥 800k readers</span>
-      <span class="p p-m">🧠 best eval framework</span>
+      <a href="https://www.figma.com/blog/introducing-claude-code-to-figma/" target="_blank" class="p p-fg">Figma Blog</a>
+      <a href="https://muz.li/blog/claude-code-to-figma-how-the-new-code-to-canvas-integration-works/" target="_blank" class="p p-nl">Muzli</a>
+      <a href="https://www.builder.io/blog/claude-code-to-figma" target="_blank" class="p p-web">Builder.io</a>
+      <span class="p p-m">🔄 bidirectional loop</span>
     </div>
   </div>
 
   <div class="g2">
-    <div class="c sm" onclick="go('https://blog.replit.com/vibe-coding-decks-and-dashboards')(event)">
-      <h3><a href="https://blog.replit.com/vibe-coding-decks-and-dashboards" target="_blank">PMs are vibe-coding their own dashboards</a></h3>
-      <p>Interesting case study from Replit on PMs building their own dashboards, slide decks, and launch materials — all in the same environment. No waiting for design or eng. The argument: the PM who can prototype their own ideas gets better outcomes than the PM who only writes specs. Worth reading if you're a PM wondering whether these tools are actually useful for you.</p>
+    <div class="c sm" onclick="go('https://www.geeky-gadgets.com/claude-design-vs-figma/')(event)">
+      <h3><a href="https://www.geeky-gadgets.com/claude-design-vs-figma/" target="_blank">Claude Design vs Figma Make: which one actually fits</a></h3>
+      <p>Both take natural language and produce a usable design — but from opposite directions. Claude Design extends the agentic workflow (conversational, Opus 4.7, implementation bundle output). Figma Make layers AI onto an existing canvas (accessible, team-shareable, integrates with components you already have). The practical split: use Claude Design starting from scratch, shipping to code. Use Figma Make iterating inside a live design system.</p>
       <div class="pills">
-        <a href="https://blog.replit.com/vibe-coding-decks-and-dashboards" target="_blank" class="p p-web">Replit Blog</a>
-        <span class="p p-m">📅 this week</span>
+        <a href="https://www.geeky-gadgets.com/claude-design-vs-figma/" target="_blank" class="p p-web">Geeky Gadgets</a>
+        <a href="https://www.magicpatterns.com/blog/claude-design-vs-figma-make" target="_blank" class="p p-web">Magic Patterns</a>
       </div>
     </div>
-    <div class="c sm" onclick="go('https://forum.figma.com/share-your-feedback-26/figma-make-ai-credit-limits-not-feasible-51713/index4.html')(event)">
-      <h3><a href="https://forum.figma.com/share-your-feedback-26/figma-make-ai-credit-limits-not-feasible-51713/index4.html" target="_blank">Figma's AI credit pricing is frustrating designers</a></h3>
-      <p>If you use Figma's AI features, this thread is worth reading. Designers on the Forum are frustrated: 3,000 credits runs out in about 45 minutes of real usage. Extra credits cost 5.6× more than a ghost seat. One person burned 600 credits on a single failed prompt. The consensus isn't that the AI is bad — it's that the pricing makes people hesitant to experiment, which defeats the purpose.</p>
+    <div class="c sm" onclick="go('https://uxplanet.org/top-3-claude-code-figma-workflows-75e5c4dd0f9f')(event)">
+      <h3><a href="https://uxplanet.org/top-3-claude-code-figma-workflows-75e5c4dd0f9f" target="_blank">The 3 Claude Code + Figma workflows practitioners actually use</a></h3>
+      <p>UX Planet broke down the three patterns that have stuck: 1) Design-to-code (Figma → Claude Code via MCP), 2) Code-to-canvas (Claude Code → Figma via "Send this to Figma"), 3) Full loop (both directions in the same session). The third is what most teams are building toward — and what Code to Canvas + Claude Design makes possible for the first time.</p>
       <div class="pills">
-        <a href="https://forum.figma.com/share-your-feedback-26/figma-make-ai-credit-limits-not-feasible-51713/index4.html" target="_blank" class="p p-forum">"Not feasible"</a>
-        <a href="https://forum.figma.com/share-your-feedback-26/why-is-1-ai-credit-6x-more-expensive-than-a-full-seat-credit-49944" target="_blank" class="p p-forum">"6x more expensive"</a>
-        <span class="p p-m">💬 74 replies</span>
-        <span class="p p-m">⬆️ 54 upvotes</span>
+        <a href="https://uxplanet.org/top-3-claude-code-figma-workflows-75e5c4dd0f9f" target="_blank" class="p p-web">UX Planet</a>
+        <span class="p p-m">🛠️ Apr 2026</span>
       </div>
     </div>
   </div>
@@ -353,39 +462,39 @@ function toggleTheme(){
   <div class="sl">From the platforms this week</div>
 
   <div class="g2">
-    <a href="https://www.reddit.com/r/experienceddesigners/" target="_blank" class="src-card">
+    <a href="https://www.theneurondaily.com/p/anthropic-s-claude-design-launched-and-reddit-has-thoughts" target="_blank" class="src-card">
       <div class="src-body">
-        <div class="src-from rd">r/ExperiencedDesigners · Reddit</div>
-        <h4>"My team went from 8 designers to 5. We ship more now."</h4>
-        <p>Senior designer at a mid-size SaaS. No layoffs — attrition + AI adoption. The 5 remaining designers own more decisions, less production. Thread has 92 replies, mostly people sharing similar stories from their own teams.</p>
-        <div class="src-meta"><span>⬆️ 187</span><span>💬 92 replies</span><span>📅 5 days ago</span></div>
+        <div class="src-from rd">r/ClaudeAI · Reddit</div>
+        <h4>"2 prompts in and I've already burned through half my weekly allowance."</h4>
+        <p>Token burn dominated the Claude Design launch thread. Users reporting 3–4 full design sessions exhaust Pro weekly limits. One commenter: "The model does more work per turn — until it silently does the wrong work and you've spent 200k tokens on a redesign you didn't ask for."</p>
+        <div class="src-meta"><span>💬 top complaint</span><span>📅 Apr 17</span></div>
       </div>
     </a>
-    <a href="https://www.lennysnewsletter.com/p/openclaw-the-complete-guide-to-building" target="_blank" class="src-card">
+    <a href="https://simplywall.st/stocks/us/software/nyse-fig/figma/news/how-investors-may-respond-to-figma-fig-director-mike-krieger" target="_blank" class="src-card">
       <div class="src-body">
-        <div class="src-from li">Claire Vo · Lenny's Newsletter</div>
-        <h4>"I now have 9 AI agents running my business."</h4>
-        <p>OpenClaw agents on Mac Minis and old laptops. Family scheduling, inbound sales, podcast prep, course management. It deleted her calendar the first time she tried it. The comment thread is worth more than the post — 340 replies from people sharing their own agent setups.</p>
-        <div class="src-meta"><span>👍 2.4k</span><span>💬 340 comments</span><span>🔄 890 reshares</span></div>
+        <div class="src-from li">Simply Wall St · Analysis</div>
+        <h4>"Figma's non-designer user base just became its vulnerability."</h4>
+        <p>37% of Figma users are non-designers — PMs, devs, and execs making quick mocks. That expansion strategy becomes a liability the moment those users can ask Claude Design to do it instead. The analysis that flipped how investors read the Krieger exit.</p>
+        <div class="src-meta"><span>📊 investor analysis</span><span>📅 Apr 14</span></div>
       </div>
     </a>
   </div>
 
   <div class="g2">
-    <a href="https://www.lennysnewsletter.com/p/the-design-process-is-dead" target="_blank" class="src-card">
+    <a href="https://simonwillison.net/2026/Apr/2/lennys-podcast/" target="_blank" class="src-card">
       <div class="src-body">
-        <div class="src-from pod">Lenny's Podcast · Episode</div>
-        <h4>Jenny Wen: "60-70% of design was mocking and prototyping — that's what AI eats."</h4>
-        <p>Head of design at Claude/Anthropic, ex-Figma. Engineers running 7 agents simultaneously, shipping in hours. Designers can't block with month-long discovery cycles. The episode that rewired how the community talks about the design role.</p>
-        <div class="src-meta"><span>🎧 1h 17m</span><span>❤️ 173 likes</span><span>📅 Mar 1</span></div>
+        <div class="src-from pod">Lenny's Podcast · Simon Willison</div>
+        <h4>"November 2025 was the inflection point — when AI coding agents crossed from 'mostly works' to 'actually works.'"</h4>
+        <p>How Simon writes 95% of code from his phone now. The three agentic patterns he uses daily. Why mid-career engineers (not juniors) are most at risk. The "dark factory" pattern where AI does its own QA with no human in the loop.</p>
+        <div class="src-meta"><span>🎧 ~1h 20m</span><span>📅 Apr 2</span><span>⭐ high signal</span></div>
       </div>
     </a>
-    <a href="https://medium.com/@han.heloir/cursor-3-is-not-an-ide-update-its-a-bet-that-you-ll-manage-agents-not-write-code-0d2bc51f0dcb" target="_blank" class="src-card">
+    <a href="https://www.indiehackers.com/post/i-shipped-a-productivity-saas-in-30-days-as-a-solo-dev-heres-what-ai-actually-changed-and-what-it-didn-t-15c8876106" target="_blank" class="src-card">
       <div class="src-body">
-        <div class="src-from rd">Hacker News · Discussion</div>
-        <h4>"I wish they'd keep letting the developer drive. I still want to code, not vibe my way through tickets."</h4>
-        <p>The top comment on the Cursor 3 launch thread. A Cursor engineer responded within minutes: the IDE still exists. The Agents Window is a separate surface. The developer backlash is real — and the Cursor team is navigating both audiences at once.</p>
-        <div class="src-meta"><span>⬆️ top comment</span><span>💬 400+ replies</span><span>📅 Apr 2</span></div>
+        <div class="src-from rd">Indie Hackers · Post</div>
+        <h4>"I shipped a productivity SaaS in 30 days solo. Here's what AI actually changed — and what it didn't."</h4>
+        <p>The honest version of the "vibe-coded in a weekend" genre. AI changed: exploration loop (hours, not days), UI scaffolding, copy. Didn't change: architecture decisions, debugging hard errors, anything requiring domain knowledge. Useful precisely because it doesn't oversell.</p>
+        <div class="src-meta"><span>📝 post</span><span>💬 honest take</span></div>
       </div>
     </a>
   </div>
@@ -394,72 +503,72 @@ function toggleTheme(){
   <div class="sl">Watch & listen</div>
 
   <div class="g3">
-    <a href="https://www.lennysnewsletter.com/p/the-design-process-is-dead" target="_blank" class="vid-card" style="animation-delay:.1s">
-      <div class="vid-thumb" style="background:linear-gradient(135deg,#1a1040 0%,#2d1b69 50%,#4a2c8a 100%)">
+    <a href="https://simonwillison.net/2026/Apr/2/lennys-podcast/" target="_blank" class="vid-card" style="animation-delay:.1s">
+      <div class="vid-thumb" style="background:linear-gradient(135deg,#0f172a 0%,#1e3a5f 50%,#2563ab 100%)">
         <div class="vt-play">▶</div>
-        <span class="vt-dur">1:17:24</span>
+        <span class="vt-dur">~1h 20m</span>
         <div class="vt-label">🎙️ Podcast</div>
       </div>
       <div class="vid-body">
-        <h4>The Design Process Is Dead — Jenny Wen</h4>
-        <p>Lenny's Podcast · Most referenced episode</p>
+        <h4>AI State of the Union — Simon Willison</h4>
+        <p>Lenny's Podcast · Dark factories, agentic patterns</p>
       </div>
     </a>
-    <a href="https://creators.spotify.com/pod/profile/pen-name/episodes/A-designers-guide-to-AI" target="_blank" class="vid-card" style="animation-delay:.2s">
-      <div class="vid-thumb" style="background:linear-gradient(135deg,#0d1117 0%,#161b22 50%,#21262d 100%)">
-        <div class="vt-play">▶</div>
-        <span class="vt-dur">58:00</span>
-        <div class="vt-label">🎙️ Podcast</div>
+    <a href="https://venturebeat.com/technology/anthropic-just-launched-claude-design-an-ai-tool-that-turns-prompts-into-prototypes-and-challenges-figma" target="_blank" class="vid-card" style="animation-delay:.2s">
+      <div class="vid-thumb" style="background:linear-gradient(135deg,#1a0b2e 0%,#2d1654 50%,#5b21b6 100%)">
+        <div class="vt-play" style="font-size:14px">📝</div>
+        <span class="vt-dur">10 min</span>
+        <div class="vt-label">📝 Analysis</div>
       </div>
       <div class="vid-body">
-        <h4>Designing in Cursor — Joel Unger (Atlassian)</h4>
-        <p>How I AI · Prototyping Trello with AI</p>
+        <h4>Anthropic launches Claude Design — full breakdown</h4>
+        <p>VentureBeat · What it does, who it's for</p>
       </div>
     </a>
-    <a href="https://creatoreconomy.so/p/master-claude-code-figma-mcp-for-design-felix-lee" target="_blank" class="vid-card" style="animation-delay:.3s">
-      <div class="vid-thumb" style="background:linear-gradient(135deg,#0f172a 0%,#1e293b 50%,#334155 100%)">
-        <div class="vt-play">▶</div>
-        <span class="vt-dur">50:12</span>
-        <div class="vt-label">🎬 Video</div>
+    <a href="https://muz.li/blog/vibe-design-in-2026-what-ai-generated-ui-means-for-your-work/" target="_blank" class="vid-card" style="animation-delay:.3s">
+      <div class="vid-thumb" style="background:linear-gradient(135deg,#071a12 0%,#0f3020 50%,#1a5e35 100%)">
+        <div class="vt-play" style="font-size:14px">📝</div>
+        <span class="vt-dur">15 min</span>
+        <div class="vt-label">📝 Deep dive</div>
       </div>
       <div class="vid-body">
-        <h4>Claude Code + Figma MCP: Full Pipeline</h4>
-        <p>Felix Lee · Creator Economy</p>
+        <h4>Vibe Design in 2026: What AI-Generated UI Means</h4>
+        <p>Muzli · For designers, honestly</p>
       </div>
     </a>
   </div>
   <div class="g3">
-    <a href="https://www.classcentral.com/course/youtube-from-figma-to-cursor-claude-code-with-mcp-469569" target="_blank" class="vid-card" style="animation-delay:.15s">
-      <div class="vid-thumb" style="background:linear-gradient(135deg,#071a12 0%,#0f2e20 50%,#1a4a33 100%)">
-        <div class="vt-play">▶</div>
-        <span class="vt-dur">21:04</span>
-        <div class="vt-label">🎬 Video</div>
-      </div>
-      <div class="vid-body">
-        <h4>Figma → Cursor with MCP</h4>
-        <p>DesignCourse · YouTube tutorial</p>
-      </div>
-    </a>
-    <a href="https://verifiedinsider.substack.com/p/operating-as-an-ai-native-product" target="_blank" class="vid-card" style="animation-delay:.25s">
-      <div class="vid-thumb" style="background:linear-gradient(135deg,#1a0f0a 0%,#2d1f15 50%,#4a3425 100%)">
+    <a href="https://www.figma.com/blog/introducing-claude-code-to-figma/" target="_blank" class="vid-card" style="animation-delay:.15s">
+      <div class="vid-thumb" style="background:linear-gradient(135deg,#1a0a2e 0%,#2e1065 50%,#6d28d9 100%)">
         <div class="vt-play" style="font-size:14px">📝</div>
-        <span class="vt-dur">18 min</span>
-        <div class="vt-label">📝 Deep dive</div>
+        <span class="vt-dur">8 min</span>
+        <div class="vt-label">📝 Tutorial</div>
       </div>
       <div class="vid-body">
-        <h4>Operating as an AI-Native Designer</h4>
-        <p>Verified Insider · Substack interview</p>
+        <h4>Claude Code to Figma: Code to Canvas</h4>
+        <p>Figma Blog · "Send this to Figma"</p>
       </div>
     </a>
-    <a href="https://goodenoughdesigner.substack.com/p/how-i-use-claude-code-to-vibe-code" target="_blank" class="vid-card" style="animation-delay:.35s">
-      <div class="vid-thumb" style="background:linear-gradient(135deg,#1e1e2e 0%,#2a1f4e 50%,#a259ff 100%)">
+    <a href="https://www.the-ai-corner.com/p/claude-opus-4-7-guide-benchmarks-2026" target="_blank" class="vid-card" style="animation-delay:.25s">
+      <div class="vid-thumb" style="background:linear-gradient(135deg,#0c1212 0%,#1a2424 50%,#2d4040 100%)">
         <div class="vt-play" style="font-size:14px">📝</div>
         <span class="vt-dur">12 min</span>
-        <div class="vt-label">📝 Workflow</div>
+        <div class="vt-label">📝 Guide</div>
       </div>
       <div class="vid-body">
-        <h4>How I Vibe Code My Designs</h4>
-        <p>Good Enough Designer · Substack</p>
+        <h4>Claude Opus 4.7: benchmarks, features, migration</h4>
+        <p>The AI Corner · Full guide</p>
+      </div>
+    </a>
+    <a href="https://medium.com/design-bootcamp/what-claude-design-actually-changes-for-designers-0c5b04fae343" target="_blank" class="vid-card" style="animation-delay:.35s">
+      <div class="vid-thumb" style="background:linear-gradient(135deg,#1e0a0a 0%,#3d1515 50%,#7f1d1d 100%)">
+        <div class="vt-play" style="font-size:14px">📝</div>
+        <span class="vt-dur">9 min</span>
+        <div class="vt-label">📝 Perspective</div>
+      </div>
+      <div class="vid-body">
+        <h4>What Claude Design Actually Changes for Designers</h4>
+        <p>Medium · Bootcamp</p>
       </div>
     </a>
   </div>
@@ -470,21 +579,21 @@ function toggleTheme(){
   <div class="try-row">
     <div class="try">
       <div class="try-t">5 min</div>
-      <h4>Open Cursor's Design Mode</h4>
-      <p>Cmd+Shift+P → Agents Window. Click on any UI element in the browser and tell the agent what to change. No code.</p>
-      <a href="https://cursor.com/changelog/3-0" target="_blank">Cursor changelog →</a>
+      <h4>Try Claude Design</h4>
+      <p>Available on Pro, Max, Team, and Enterprise. Describe a one-pager or prototype. Then look at the implementation bundle output — that's the real unlock, not the visual.</p>
+      <a href="https://claude.ai" target="_blank">claude.ai →</a>
     </div>
     <div class="try">
       <div class="try-t">30 min</div>
-      <h4>Build something in Lovable</h4>
-      <p>Describe a dashboard in plain English. Watch it appear. Push it live. The free tier is enough to feel the shift.</p>
-      <a href="https://lovable.dev" target="_blank">Lovable →</a>
+      <h4>Send your UI to Figma</h4>
+      <p>In Claude Code, build or iterate any feature and type "Send this to Figma." Your live UI becomes editable layers. One command, zero export steps.</p>
+      <a href="https://www.figma.com/blog/introducing-claude-code-to-figma/" target="_blank">Figma blog →</a>
     </div>
     <div class="try">
       <div class="try-t">An afternoon</div>
-      <h4>Onlook + your React app</h4>
-      <p>Open your actual codebase in Onlook. Drag, resize, edit — then see the code it wrote. The Figma-to-code gap closes.</p>
-      <a href="https://www.onlook.com/" target="_blank">Onlook →</a>
+      <h4>Map your AI dependency chain</h4>
+      <p>Which of your tools run on Anthropic models? Which on OpenAI or Gemini? The Krieger exit made the strategic risk visible — worth knowing where you sit.</p>
+      <a href="https://techcrunch.com/2026/04/16/anthropic-cpo-leaves-figmas-board-after-reports-he-will-offer-a-competing-product/" target="_blank">TechCrunch →</a>
     </div>
   </div>
 
@@ -493,15 +602,16 @@ function toggleTheme(){
 
   <div class="bottom">
     <h2>The bottom line</h2>
-    <p>The design tool landscape is fragmenting in interesting ways. Cursor built an agent control room with visual feedback for designers. Lovable proved that non-developers can ship real apps. Onlook merged Figma's editing model with actual codebases. And Figma opened its canvas to agents while navigating a credit pricing backlash.</p>
-    <p>The thread connecting all of it: <strong>the designer's value is moving from production to judgment.</strong> Deciding what's worth building. Writing the rules that agents follow. Evaluating whether the output is actually good enough. That's not a smaller role — it's a harder one, and a more interesting one.</p>
+    <p>Three events in three days told the same story. The CPO of Anthropic left Figma's board on April 14. The most capable model yet shipped April 16. The product that made the threat real launched April 17. None of it was subtle — the sequence was designed to be read.</p>
+    <p>The deeper shift: Figma's AI now runs on Gemini and OpenAI. Cursor is adding Kimi K2.5. The companies that built on Anthropic are quietly diversifying away from the company that just became their competitor. That's the structural story — and it's just starting. <strong>Anthropic is at $30B ARR and entering application markets. The next question isn't whether other categories get targeted. It's which ones, and when.</strong></p>
     <p style="color:var(--td);font-size:12px;margin-top:20px">See you next Monday. — Pulse</p>
   </div>
 
   <div class="cta" id="sub">
     <h2>Never miss an issue</h2>
-    <p>Every Monday. Free forever.</p>
-    <div class="cta-f"><input type="email" placeholder="you@email.com"><button>Subscribe</button></div>
+    <p>Every Monday morning — the AI × product stories that actually matter for designers and PMs. Free, no spam, unsubscribe anytime.</p>
+    <div class="cta-f"><input type="email" placeholder="you@work.com"><button>Subscribe →</button></div>
+    <p style="margin-top:12px;font-size:11px;color:var(--td);font-family:var(--mono)">15 issues published · readers at Figma, Anthropic, Google, Shopify</p>
   </div>
 </div>
 
