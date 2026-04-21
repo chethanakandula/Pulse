@@ -1,0 +1,19 @@
+{
+  "events": [
+    { "name": "newsletter subscribed", "priority": "High" },
+    { "name": "article link clicked", "priority": "High" },
+    { "name": "source pill clicked", "priority": "Medium" },
+    { "name": "theme toggled", "priority": "Low" },
+    { "name": "archive issue clicked", "priority": "Medium" },
+    { "name": "nav link clicked", "priority": "Medium" },
+    { "name": "try prompt clicked", "priority": "Medium" },
+    { "name": "video card clicked", "priority": "Medium" },
+    { "name": "error encountered", "priority": "High" }
+  ],
+  "autocapture": [
+    "[Amplitude] Page Viewed",
+    "[Amplitude] Element Clicked",
+    "[Amplitude] Form Started",
+    "[Amplitude] Form Submitted"
+  ]
+}
